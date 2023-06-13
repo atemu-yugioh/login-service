@@ -1,36 +1,14 @@
 const express = require('express')
+const authController = require('../../controllers/auth.controller')
+const asyncHandler = require('../../helper/asyncHandler')
 const router = express.Router()
 
-router.post('/login', (req, res, next) => {
-  return res.status(200).json({
-    message: 'success',
-    status: 200,
-    data: null
-  })
-})
+router.post('/register', asyncHandler(authController.register))
 
-router.post('/register', (req, res, next) => {
-  return res.status(200).json({
-    message: 'success',
-    status: 200,
-    data: null
-  })
-})
+router.post('/login', asyncHandler(authController.login))
 
-router.post('/logout', (req, res, next) => {
-  return res.status(200).json({
-    message: 'success',
-    status: 200,
-    data: null
-  })
-})
+router.post('/logout', asyncHandler(authController.logout))
 
-router.post('/handle-refresh-token', (req, res, next) => {
-  return res.status(200).json({
-    message: 'success',
-    status: 200,
-    data: null
-  })
-})
+router.post('/handle-refresh-token', asyncHandler(authController.handleRefreshToken))
 
 module.exports = router
