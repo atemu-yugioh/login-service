@@ -13,6 +13,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 // init databse
+require('./dbs/init.mongodb')
 
 // init routes
 
