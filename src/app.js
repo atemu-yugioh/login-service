@@ -16,6 +16,7 @@ app.use(express.urlencoded({ extended: true }))
 require('./dbs/init.mongodb')
 
 // init routes
+app.use('/api/v1', require('./routes'))
 
 // handle error 404 not found
 app.use((req, res, next) => {
