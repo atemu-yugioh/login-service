@@ -11,12 +11,10 @@ const getInfoData = ({ object = {}, fields = [] }) => {
   const final = {}
 
   fields = new Set(fields)
-
   const keysToCopy = Object.keys(object).filter((key) => fields.has(key))
   for (const key of keysToCopy) {
     final[key] = object[key]
   }
-
   return final
 }
 
