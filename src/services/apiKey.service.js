@@ -10,6 +10,15 @@ class ApiKeyService {
       fields: ['key', 'permissions']
     })
   }
+
+  static findByKey = async (key) => {
+    const keyFound = await apiKeyRepositories.findByKey(key)
+
+    return getInfoData({
+      object: keyFound,
+      fields: ['key', 'permissions']
+    })
+  }
 }
 
 module.exports = ApiKeyService

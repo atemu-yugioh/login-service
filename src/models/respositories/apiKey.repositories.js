@@ -9,6 +9,11 @@ const create = async ({ permissions = ['create', 'read'], createdBy = 'admin' })
   })
 }
 
+const findByKey = async (key) => {
+  return apiKeyModel.findOne({ key }).lean()
+}
+
 module.exports = {
-  create
+  create,
+  findByKey
 }
