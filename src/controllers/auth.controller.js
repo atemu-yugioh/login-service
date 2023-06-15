@@ -1,4 +1,5 @@
 const { SuccessResponse, CREATED, OK } = require('../core/success.response')
+const { createRSAKey, createHEXKey } = require('../utils/auth')
 
 class AuthController {
   register = async (req, res, next) => {
@@ -13,11 +14,7 @@ class AuthController {
   login = async (req, res, next) => {
     new OK({
       message: 'login success',
-      data: {
-        email: 'nguyenthieng0106@gmail.com',
-        token: 'access token',
-        refreshToken: 'refresh token'
-      }
+      data: createRSAKey()
     }).send(res)
   }
 
@@ -31,10 +28,7 @@ class AuthController {
   handleRefreshToken = async (req, res, next) => {
     new OK({
       message: 'success',
-      data: {
-        token: 'new access token',
-        refreshToken: 'new refresh token'
-      }
+      data: createHEXKey()
     }).send(res)
   }
 }
