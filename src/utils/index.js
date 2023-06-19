@@ -55,11 +55,16 @@ const removeUndefinedFieldObject = (obj) => {
   return obj
 }
 
+const newMongoObjectId = () => {
+  return new Types.ObjectId()
+}
+
 module.exports = {
   getInfoData,
   unGetInfoData,
   getSelectFields,
   unGetSelectFields,
   removeUndefinedFieldObject,
-  convertToObjectMongodbId
+  convertToObjectMongodbId,
+  newMongoObjectId
 }
