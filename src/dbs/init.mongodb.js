@@ -4,6 +4,7 @@ const {
 } = require('../configs/config.mongodb')
 
 const connectionString = `mongodb://${host}:${port}/${name}`
+
 class Database {
   constructor() {
     this.connect()
@@ -18,7 +19,7 @@ class Database {
     mongoose
       .connect(connectionString)
       .then((_) => {
-        console.log('Connect databse success')
+        console.log('Connect database success')
       })
       .catch((error) => {
         console.log('Unable connect to database')
