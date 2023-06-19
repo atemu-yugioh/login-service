@@ -57,10 +57,15 @@ const isMatchPassword = (password, hashedPassword) => {
   return bcrypt.compare(password, hashedPassword)
 }
 
+const hashPassword = (password) => {
+  return bcrypt.hash(password, 10)
+}
+
 module.exports = {
   createTokenPair,
   verifyJWT,
   createRSAKey,
   createHEXKey,
-  isMatchPassword
+  isMatchPassword,
+  hashPassword
 }
