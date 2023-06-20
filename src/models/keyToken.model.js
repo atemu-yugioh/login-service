@@ -41,17 +41,17 @@ const keyTokenSchema = Schema(
       default: false
     },
     isDeleted: {
-      type: String,
+      type: Boolean,
       default: false
     },
     isDefault: {
-      type: String,
+      type: Boolean,
       default: false
     }
   },
   {
     timestamps: {
-      createdAd: 'createdDate',
+      createdAt: 'createdDate',
       updatedAt: 'modifiedDate'
     },
     collection: COLLECTION_NAME

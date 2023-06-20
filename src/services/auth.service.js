@@ -1,8 +1,8 @@
 const { BadRequestError } = require('../core/error.response')
-const { findByEmail, createUser } = require('../models/repositories/auth.repositories')
+const { findByEmail, createUser } = require('../models/repositories/user.repositories')
 const { createKeyToken } = require('../models/repositories/keyToken.repositories')
 const { generateObjectMongodbId, getInfoData } = require('../utils')
-const { hashedPassword, createHEXKey, createTokenPair } = require('../utils/auth')
+const { hashedPassword, createHEXKey, createTokenPair, comparePassword } = require('../utils/auth')
 
 class AuthService {
   static signUp = async ({ email, name, password, phone, roles, ...other }) => {
@@ -40,7 +40,7 @@ class AuthService {
 
       // create key store
       const newKeyToken = await createKeyToken({
-        user: newUser._id,
+        userId: newUser._id,
         publicKey,
         privateKey,
         refreshToken,
@@ -61,6 +61,61 @@ class AuthService {
           accessToken,
           refreshToken
         }
+      }
+    }
+  }
+
+  static login = async ({ email, password }) => {
+    // check user exist
+    const userFound = await findByEmail(email)
+
+    if (!userFound) {
+      throw new BadRequestError('Error: User not registered!')
+    }
+
+    // compare password
+    const isMath = comparePassword(password, userFound.password)
+
+    if (!isMath) {
+      throw new BadRequestError('Error: password wrong')
+    }
+
+    // generate publicKey and privateKey
+    const { publicKey, privateKey } = createHEXKey()
+
+    // create pair token
+    const { _id: userId } = userFound
+    const { accessToken, refreshToken } = await createTokenPair(
+      {
+        userId: userId,
+        email: email
+      },
+      publicKey,
+      privateKey
+    )
+
+    // create keytoken
+    const keyToken = await createKeyToken({
+      userId: userId,
+      publicKey,
+      privateKey,
+      refreshToken,
+      createdBy: userId,
+      modifiedBy: userId
+    })
+
+    if (!keyToken) {
+      throw new BadRequestError('Error: create key token fail')
+    }
+
+    return {
+      user: getInfoData({
+        object: userFound,
+        fields: ['email', 'name', 'avatar', 'address', 'phone']
+      }),
+      tokens: {
+        accessToken,
+        refreshToken
       }
     }
   }

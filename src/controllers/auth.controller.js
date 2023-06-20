@@ -3,7 +3,7 @@ const AuthService = require('../services/auth.service')
 const { createRSAKey, createHEXKey } = require('../utils/auth')
 
 class AuthController {
-  register = async (req, res, next) => {
+  signUp = async (req, res, next) => {
     new CREATED({
       data: await AuthService.signUp({ ...req.body })
     }).send(res)
@@ -12,7 +12,7 @@ class AuthController {
   login = async (req, res, next) => {
     new OK({
       message: 'login success',
-      data: createRSAKey()
+      data: await AuthService.login({ ...req.body })
     }).send(res)
   }
 
