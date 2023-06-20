@@ -1,13 +1,11 @@
 const { SuccessResponse, CREATED, OK } = require('../core/success.response')
+const AuthService = require('../services/auth.service')
 const { createRSAKey, createHEXKey } = require('../utils/auth')
 
 class AuthController {
   register = async (req, res, next) => {
     new CREATED({
-      data: {
-        email: 'nguyenthieng0106@gmail.com',
-        password: '111111'
-      }
+      data: await AuthService.signUp({ ...req.body })
     }).send(res)
   }
 

@@ -23,7 +23,7 @@ const userSchema = Schema(
     },
     avatar: {
       type: String,
-      required: true
+      default: ''
     },
     address: {
       type: String,
@@ -34,11 +34,11 @@ const userSchema = Schema(
       default: false
     },
     isDisabled: {
-      type: String,
+      type: Boolean,
       default: false
     },
     isDeleted: {
-      type: String,
+      type: Boolean,
       default: false
     },
     createdBy: {
@@ -56,7 +56,8 @@ const userSchema = Schema(
     timestamps: {
       createdAt: 'createdDate',
       updatedAt: 'modifiedDate'
-    }
+    },
+    collection: COLLECTION_NAME
   }
 )
 

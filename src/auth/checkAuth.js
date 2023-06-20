@@ -11,7 +11,6 @@ const apiKey = asyncHandler(async (req, res, next) => {
   }
 
   const objKey = await getApiKey(key)
-  console.log('🚀 ~ file: checkAuth.js:14 ~ apiKey ~ objKey:', objKey)
 
   if (!objKey) {
     throw new ForbiddenError('Access denied')
