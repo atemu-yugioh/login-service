@@ -1,4 +1,5 @@
 const JWT = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
 const crypto = require('crypto')
 
 const createTokenPair = async (payload, publicKey, privateKey) => {
@@ -52,9 +53,19 @@ const verifyJWT = async (token, secretKey) => {
   return await JWT.verify(token, secretKey)
 }
 
+const hashedPassword = (password) => {
+  return bcrypt.hash(password, 10)
+}
+
+const comparePassword = (password, hashedPassword) => {
+  return bcrypt.compare(password, hashedPassword)
+}
+
 module.exports = {
   createTokenPair,
   verifyJWT,
   createRSAKey,
-  createHEXKey
+  createHEXKey,
+  hashedPassword,
+  comparePassword
 }

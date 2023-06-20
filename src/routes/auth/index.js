@@ -11,4 +11,6 @@ router.post('/logout', asyncHandler(authController.logout))
 
 router.post('/handle-refresh-token', asyncHandler(authController.handleRefreshToken))
 
+// change password
+
 module.exports = router

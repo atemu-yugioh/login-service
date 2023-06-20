@@ -2,39 +2,39 @@ const { ReasonPhrases, StatusCodes } = require('../utils/httpStatusCode')
 const reasonPhrases = require('../utils/reasonPhrases')
 
 class ErrorResponse extends Error {
-  constructor(status, message) {
+  constructor(message, status) {
     super(message)
     this.status = status
   }
 }
 
 class ConflictRequestError extends ErrorResponse {
-  constructor(status = StatusCodes.CONFLICT, message = ReasonPhrases.CONFLICT) {
-    super(status, message)
+  constructor(message = ReasonPhrases.CONFLICT, status = StatusCodes.CONFLICT) {
+    super(message, status)
   }
 }
 
 class BadRequestError extends ErrorResponse {
-  constructor(status = StatusCodes.BAD_REQUEST, message = ReasonPhrases.BAD_REQUEST) {
-    super(status, message)
+  constructor(message = ReasonPhrases.BAD_REQUEST, status = StatusCodes.BAD_REQUEST) {
+    super(message, status)
   }
 }
 
 class AuthFailureError extends ErrorResponse {
-  constructor(status = StatusCodes.UNAUTHORIZED, message = ReasonPhrases.UNAUTHORIZED) {
-    super(status, message)
+  constructor(message = ReasonPhrases.UNAUTHORIZED, status = StatusCodes.UNAUTHORIZED) {
+    super(message, status)
   }
 }
 
 class NotFoundError extends ErrorResponse {
-  constructor(status = StatusCodes.NOT_FOUND, message = ReasonPhrases.NOT_FOUND) {
-    super(status, message)
+  constructor(message = ReasonPhrases.NOT_FOUND, status = StatusCodes.NOT_FOUND) {
+    super(message, status)
   }
 }
 
 class ForbiddenError extends ErrorResponse {
-  constructor(status = StatusCodes.FORBIDDEN, message = reasonPhrases.FORBIDDEN) {
-    super(status, message)
+  constructor(message = reasonPhrases.FORBIDDEN, status = StatusCodes.FORBIDDEN) {
+    super(message, status)
   }
 }
 
