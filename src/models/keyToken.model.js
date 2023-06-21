@@ -1,9 +1,9 @@
 const { model, Schema } = require('mongoose')
 
-const DOCUMENT_NAME = 'Session'
-const COLLECTION_NAME = 'Sessions'
+const DOCUMENT_NAME = 'KeyToken'
+const COLLECTION_NAME = 'KeyTokens'
 
-const sessionSchema = Schema(
+const keyTokenSchema = Schema(
   {
     user: {
       type: Schema.Types.ObjectId,
@@ -54,4 +54,4 @@ const sessionSchema = Schema(
   }
 )
 
-module.exports = model(DOCUMENT_NAME, sessionSchema)
+module.exports = model(DOCUMENT_NAME, keyTokenSchema)

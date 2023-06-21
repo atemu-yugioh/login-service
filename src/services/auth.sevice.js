@@ -1,6 +1,6 @@
 const { BadRequestError } = require('../core/error.response')
 const authRepositories = require('../models/repositories/user.repositories')
-const sessionRepositories = require('../models/repositories/session.repositories')
+const keyTokenRepositories = require('../models/repositories/keyToken.repositories')
 const { newMongoObjectId, getInfoData } = require('../utils')
 const { hashPassword, createHEXKey, createTokenPair } = require('../utils/auth')
 
@@ -17,7 +17,7 @@ class AuthService {
 
     const passwordHashed = await hashPassword(password)
 
-    // create new User authRepositories.findByEmail(email)
+    // create new User
     const id = newMongoObjectId()
     const newUser = await authRepositories.createUser({
       _id: id,
@@ -27,35 +27,37 @@ class AuthService {
       phone: phone,
       roles,
       createdBy: id,
-      modifiedBy: id
+      modifiedBy: id,
+      ...other
     })
 
     if (newUser) {
       // generate HEX key
-      const { privateKey, publicKey } = await createHEXKey()
+      const { privateKey, publicKey } = createHEXKey()
 
       // create pair token
+      const { _id: userId } = newUser
       const { accessToken, refreshToken } = await createTokenPair(
         {
-          userId: newUser._id,
+          userId: userId,
           email
         },
         publicKey,
         privateKey
       )
 
-      // save session
-      const session = await sessionRepositories.createSession({
-        user: newUser._id,
+      // save keyToken
+      const keyToken = await keyTokenRepositories.createKeyToken({
+        userId: userId,
         publicKey,
         privateKey,
         refreshToken: refreshToken,
-        createdBy: newUser._id,
-        modifiedBy: newUser._id
+        createdBy: userId,
+        modifiedBy: userId
       })
 
-      if (!session) {
-        throw new BadRequestError('Error:: Session Error')
+      if (!keyToken) {
+        throw new BadRequestError('Error:: keyToken Error')
       }
 
       return {
