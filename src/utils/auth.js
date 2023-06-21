@@ -1,11 +1,12 @@
 const JWT = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const crypto = require('crypto')
+const { AuthFailureError } = require('../core/error.response')
 
 const createTokenPair = async (payload, publicKey, privateKey) => {
   try {
     const accessToken = await JWT.sign(payload, publicKey, {
-      expiresIn: '2d'
+      expiresIn: '5s'
     })
 
     const refreshToken = await JWT.sign(payload, privateKey, {
@@ -50,7 +51,11 @@ const createHEXKey = () => {
 }
 
 const verifyJWT = async (token, secretKey) => {
-  return await JWT.verify(token, secretKey)
+  try {
+    return await JWT.verify(token, secretKey)
+  } catch (error) {
+    throw new AuthFailureError('Token expired')
+  }
 }
 
 const isMatchPassword = (password, hashedPassword) => {

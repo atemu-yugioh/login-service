@@ -1,3 +1,4 @@
+const { convertToObjectMongodbId } = require('../../utils')
 const keyTokenModel = require('../keyToken.model')
 
 const createKeyToken = async ({ userId, publicKey, privateKey, refreshToken, createdBy, modifiedBy }) => {
@@ -22,6 +23,11 @@ const createKeyToken = async ({ userId, publicKey, privateKey, refreshToken, cre
   return tokens ? tokens.publicKey : null
 }
 
+const findByUserId = async (userId) => {
+  return await keyTokenModel.findOne({ user: convertToObjectMongodbId(userId) }).lean()
+}
+
 module.exports = {
-  createKeyToken
+  createKeyToken,
+  findByUserId
 }
