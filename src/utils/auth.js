@@ -54,7 +54,7 @@ const verifyJWT = async (token, secretKey) => {
   try {
     return await JWT.verify(token, secretKey)
   } catch (error) {
-    throw new AuthFailureError('Token expired')
+    return null
   }
 }
 
