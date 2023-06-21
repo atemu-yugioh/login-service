@@ -27,7 +27,11 @@ const findByUserId = async (userId) => {
   return await keyTokenModel.findOne({ user: convertToObjectMongodbId(userId) }).lean()
 }
 
+const removeKeyById = async (id) => {
+  return await keyTokenModel.deleteOne({ _id: convertToObjectMongodbId(id) })
+}
 module.exports = {
   createKeyToken,
-  findByUserId
+  findByUserId,
+  removeKeyById
 }

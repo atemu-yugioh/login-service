@@ -4,6 +4,7 @@ const keyTokenRepositories = require('../models/repositories/keyToken.repositori
 const { newMongoObjectId, getInfoData } = require('../utils')
 const { hashPassword, createHEXKey, createTokenPair } = require('../utils/auth')
 const { isMatchPassword } = require('../utils/auth')
+const KeyTokenService = require('./keyToken.service')
 
 class AuthService {
   constructor() {}
@@ -121,6 +122,14 @@ class AuthService {
         refreshToken
       }
     }
+  }
+
+  // logout
+  static logout = async (keyToken) => {
+    // remove all keyToken
+    const delKey = await KeyTokenService.removeKeyById(keyToken._id)
+
+    return delKey
   }
 }
 
