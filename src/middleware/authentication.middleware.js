@@ -16,7 +16,7 @@ const authentication = asyncHandler(async (req, res, next) => {
   const keyToken = await KeyTokenService.findByUserId(userId)
 
   if (!keyToken) {
-    throw new AuthFailureError('Invalid Request')
+    throw new AuthFailureError('Invalid Request', 'refreshToken')
   }
 
   // 3. check refresh token

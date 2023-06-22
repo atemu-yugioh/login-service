@@ -1,4 +1,4 @@
-const { findByUserId, removeKeyById } = require('../models/repositories/keyToken.repositories')
+const { findByUserId, removeKeyById, deleteKeyBuUserId } = require('../models/repositories/keyToken.repositories')
 
 class KeyTokenService {
   static findByUserId = async (userId) => {
@@ -7,6 +7,14 @@ class KeyTokenService {
 
   static removeKeyById = async (id) => {
     return await removeKeyById(id)
+  }
+
+  static deleteKeyByUserId = async (userId) => {
+    return await deleteKeyBuUserId(userId)
+  }
+
+  static updateRefreshTokenByUserId = ({ userId, refreshToken }) => {
+    await
   }
 }
 
