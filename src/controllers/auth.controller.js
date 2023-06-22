@@ -19,7 +19,7 @@ class AuthController {
   logout = async (req, res, next) => {
     new OK({
       message: 'logout success',
-      data: await AuthService.logout({ ...req.keyToken })
+      data: await AuthService.logout({ ...req.sessionToken })
     }).send(res)
   }
 

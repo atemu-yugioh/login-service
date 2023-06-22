@@ -1,7 +1,7 @@
 const { HEADER } = require('../configs/config.constant')
 const { AuthFailureError } = require('../core/error.response')
 const asyncHandler = require('../helper/asyncHandler')
-const KeyTokenService = require('../services/keyToken.service')
+const SessionTokenService = require('../services/SessionToken.service')
 const { verifyJWT } = require('../utils/auth')
 
 const authentication = asyncHandler(async (req, res, next) => {
@@ -12,10 +12,10 @@ const authentication = asyncHandler(async (req, res, next) => {
     throw new AuthFailureError('Invalid Request')
   }
 
-  // 2. check keyToken of user
-  const keyToken = await KeyTokenService.findByUserId(userId)
+  // 2. check sessionToken of user
+  const sessionToken = await SessionTokenService.findByUserId(userId)
 
-  if (!keyToken) {
+  if (!sessionToken) {
     throw new AuthFailureError('Invalid Request', 'refreshToken')
   }
 
@@ -24,19 +24,19 @@ const authentication = asyncHandler(async (req, res, next) => {
     try {
       const refreshToken = req.headers[HEADER.REFRESHTOKEN]
 
-      const decodeUser = await verifyJWT(refreshToken, keyToken.privateKey)
+      const decodeUser = await verifyJWT(refreshToken, sessionToken.privateKey)
 
       if (!decodeUser) {
         throw new AuthFailureError('pls re-login')
       }
 
-      // 4. check userId with keyToken match ??
+      // 4. check userId with SessionToken match ??
       if (userId !== decodeUser.userId) {
         throw new AuthFailureError('Invalid User')
       }
 
       // 5. return next
-      req.keyToken = keyToken
+      req.sessionToken = sessionToken
       req.user = decodeUser
       req.refreshToken = refreshToken
       return next()
@@ -48,9 +48,9 @@ const authentication = asyncHandler(async (req, res, next) => {
   // 3. access token
   const accessToken = req.headers[HEADER.AUTHORIZATION]
 
-  const decodeUser = await verifyJWT(accessToken, keyToken.publicKey)
+  const decodeUser = await verifyJWT(accessToken, sessionToken.publicKey)
 
-  // 4. check keyToken with userID is match ??
+  // 4. check SessionToken with userID is match ??
   if (!decodeUser) {
     throw new AuthFailureError('Token expired')
   }
@@ -59,7 +59,7 @@ const authentication = asyncHandler(async (req, res, next) => {
     throw new AuthFailureError('Invalid user')
   }
 
-  req.keyToken = keyToken
+  req.sessionToken = sessionToken
   req.user = decodeUser
   return next()
 })

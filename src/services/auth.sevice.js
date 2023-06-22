@@ -1,10 +1,10 @@
 const { BadRequestError, AuthFailureError } = require('../core/error.response')
 const authRepositories = require('../models/repositories/user.repositories')
-const keyTokenRepositories = require('../models/repositories/keyToken.repositories')
+const sessionTokenRepositories = require('../models/repositories/sessionToken.repositories')
 const { newMongoObjectId, getInfoData } = require('../utils')
 const { hashPassword, createHEXKey, createTokenPair } = require('../utils/auth')
 const { isMatchPassword } = require('../utils/auth')
-const KeyTokenService = require('./keyToken.service')
+const SessionTokenService = require('./SessionToken.service')
 const UserService = require('./user.service')
 
 class AuthService {
@@ -50,8 +50,8 @@ class AuthService {
         privateKey
       )
 
-      // save keyToken
-      const keyToken = await keyTokenRepositories.createKeyToken({
+      // save SessionToken
+      const sessionToken = await sessionTokenRepositories.createSessionToken({
         userId: userId,
         publicKey,
         privateKey,
@@ -60,8 +60,8 @@ class AuthService {
         modifiedBy: userId
       })
 
-      if (!keyToken) {
-        throw new BadRequestError('Error:: keyToken Error')
+      if (!sessionToken) {
+        throw new BadRequestError('Error:: SessionToken Error')
       }
 
       return {
@@ -99,8 +99,8 @@ class AuthService {
     const { _id: userId } = userFound
     const { accessToken, refreshToken } = await createTokenPair({ userId: userId, email }, publicKey, privateKey)
 
-    // create or update KeyToken
-    const keyToken = await keyTokenRepositories.createKeyToken({
+    // create or update sessionToken
+    const sessionToken = await sessionTokenRepositories.createSessionToken({
       userId,
       publicKey,
       privateKey,
@@ -109,8 +109,8 @@ class AuthService {
       modifiedBy: userId
     })
 
-    if (!keyToken) {
-      throw new BadRequestError('Error: keyToken Error')
+    if (!sessionToken) {
+      throw new BadRequestError('Error: SessionToken Error')
     }
 
     return {
@@ -126,25 +126,25 @@ class AuthService {
   }
 
   // logout
-  static logout = async (keyToken) => {
-    // remove all keyToken
-    const delKey = await KeyTokenService.removeKeyById(keyToken._id)
+  static logout = async (sessionToken) => {
+    // remove all SessionToken
+    const delKey = await SessionTokenService.removeKeyById(sessionToken._id)
 
     return delKey
   }
 
   // handle refresh token
-  static handleRefreshToken = async ({ user, keyToken, refreshToken }) => {
+  static handleRefreshToken = async ({ user, sessionToken, refreshToken }) => {
     const { userId, email } = user
     // check refresh token da duoc su dung chua
-    if (keyToken.refreshTokenUsed.includes(refreshToken)) {
-      // xoa tat ca keyToken cua user => nguoi dung se phai login lai
-      await KeyTokenService.deleteKeyByUserId(userId)
+    if (sessionToken.refreshTokenUsed.includes(refreshToken)) {
+      // xoa tat ca sessionToken cua user => nguoi dung se phai login lai
+      await SessionTokenService.deleteKeyByUserId(userId)
       throw new AuthFailureError('Something went wrong happen !! Pls re-login')
     }
 
     // check refresh token match
-    if (keyToken.refreshToken !== refreshToken) {
+    if (sessionToken.refreshToken !== refreshToken) {
       throw new AuthFailureError('Shop not registered')
     }
 
@@ -155,7 +155,7 @@ class AuthService {
       throw new AuthFailureError('User not registered')
     }
 
-    const { publicKey, privateKey } = keyToken
+    const { publicKey, privateKey } = sessionToken
     // generate new token pair
     const { accessToken, refreshToken: newRefreshToken } = await createTokenPair(
       { userId, email },
@@ -164,7 +164,7 @@ class AuthService {
     )
 
     // update token
-    await keyTokenRepositories.updateRefreshTokenByUserId({ userId, refreshToken, newRefreshToken })
+    await sessionTokenRepositories.updateRefreshTokenByUserId({ userId, refreshToken, newRefreshToken })
 
     return {
       user: { userId, email },
