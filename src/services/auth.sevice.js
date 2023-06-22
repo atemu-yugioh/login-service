@@ -1,10 +1,11 @@
-const { BadRequestError } = require('../core/error.response')
+const { BadRequestError, AuthFailureError } = require('../core/error.response')
 const authRepositories = require('../models/repositories/user.repositories')
 const keyTokenRepositories = require('../models/repositories/keyToken.repositories')
 const { newMongoObjectId, getInfoData } = require('../utils')
 const { hashPassword, createHEXKey, createTokenPair } = require('../utils/auth')
 const { isMatchPassword } = require('../utils/auth')
 const KeyTokenService = require('./keyToken.service')
+const UserService = require('./user.service')
 
 class AuthService {
   constructor() {}
@@ -130,6 +131,48 @@ class AuthService {
     const delKey = await KeyTokenService.removeKeyById(keyToken._id)
 
     return delKey
+  }
+
+  // handle refresh token
+  static handleRefreshToken = async ({ user, keyToken, refreshToken }) => {
+    const { userId, email } = user
+    // check refresh token da duoc su dung chua
+    if (keyToken.refreshTokenUsed.includes(refreshToken)) {
+      // xoa tat ca keyToken cua user => nguoi dung se phai login lai
+      await KeyTokenService.deleteKeyByUserId(userId)
+      throw new AuthFailureError('Something went wrong happen !! Pls re-login')
+    }
+
+    // check refresh token match
+    if (keyToken.refreshToken !== refreshToken) {
+      throw new AuthFailureError('Shop not registered')
+    }
+
+    // check user exist
+    const userFound = await UserService.findByEmail(email)
+
+    if (!userFound) {
+      throw new AuthFailureError('User not registered')
+    }
+
+    const { publicKey, privateKey } = keyToken
+    // generate new token pair
+    const { accessToken, refreshToken: newRefreshToken } = await createTokenPair(
+      { userId, email },
+      publicKey,
+      privateKey
+    )
+
+    // update token
+    await keyTokenRepositories.updateRefreshTokenByUserId({ userId, refreshToken, newRefreshToken })
+
+    return {
+      user: { userId, email },
+      tokens: {
+        accessToken,
+        refreshToken: newRefreshToken
+      }
+    }
   }
 }
 
