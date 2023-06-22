@@ -1,6 +1,6 @@
-const { findByUserId, removeKeyById, deleteKeyBuUserId } = require('../models/repositories/keyToken.repositories')
+const { findByUserId, removeKeyById, deleteKeyBuUserId } = require('../models/repositories/SessionToken.repositories')
 
-class KeyTokenService {
+class SessionTokenService {
   static findByUserId = async (userId) => {
     return await findByUserId(userId)
   }
@@ -18,4 +18,4 @@ class KeyTokenService {
   }
 }
 
-module.exports = KeyTokenService
+module.exports = SessionTokenService

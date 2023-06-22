@@ -1,8 +1,8 @@
 const { convertToObjectMongodbId } = require('../../utils')
-const keyTokenModel = require('../keyToken.model')
+const sessionTokenModel = require('../sessionToken.model')
 
-const createKeyToken = async ({ userId, publicKey, privateKey, refreshToken, createdBy, modifiedBy }) => {
-  // return await keyTokenModel.create(keyToken)
+const createSessionToken = async ({ userId, publicKey, privateKey, refreshToken, createdBy, modifiedBy }) => {
+  // return await sessionTokenModel.create(sessionToken)
 
   const filter = { user: userId }
   const update = {
@@ -18,21 +18,21 @@ const createKeyToken = async ({ userId, publicKey, privateKey, refreshToken, cre
     new: true
   }
 
-  const tokens = await keyTokenModel.findOneAndUpdate(filter, update, option)
+  const tokens = await sessionTokenModel.findOneAndUpdate(filter, update, option)
 
   return tokens ? tokens.publicKey : null
 }
 
 const findByUserId = async (userId) => {
-  return await keyTokenModel.findOne({ user: convertToObjectMongodbId(userId) }).lean()
+  return await sessionTokenModel.findOne({ user: convertToObjectMongodbId(userId) }).lean()
 }
 
 const removeKeyById = async (id) => {
-  return await keyTokenModel.deleteOne({ _id: convertToObjectMongodbId(id) })
+  return await sessionTokenModel.deleteOne({ _id: convertToObjectMongodbId(id) })
 }
 
 const deleteKeyBuUserId = async (userId) => {
-  return await keyTokenModel.deleteOne({ user: convertToObjectMongodbId(userId) })
+  return await sessionTokenModel.deleteOne({ user: convertToObjectMongodbId(userId) })
 }
 
 const updateRefreshTokenByUserId = async ({ userId, refreshToken, newRefreshToken }) => {
@@ -49,11 +49,11 @@ const updateRefreshTokenByUserId = async ({ userId, refreshToken, newRefreshToke
     upsert: true,
     new: true
   }
-  return await keyTokenModel.updateOne(filter, updateSet, option)
+  return await sessionTokenModel.updateOne(filter, updateSet, option)
 }
 
 module.exports = {
-  createKeyToken,
+  createSessionToken,
   findByUserId,
   removeKeyById,
   deleteKeyBuUserId,
