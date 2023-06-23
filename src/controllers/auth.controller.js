@@ -1,3 +1,4 @@
+const { HEADER } = require('../configs/config.constant')
 const { CREATED, OK } = require('../core/success.response')
 const AuthService = require('../services/auth.sevice')
 const { createHEXKey } = require('../utils/auth')
@@ -5,14 +6,14 @@ const { createHEXKey } = require('../utils/auth')
 class AuthController {
   signUp = async (req, res, next) => {
     new CREATED({
-      data: await AuthService.SignUp({ ...req.body })
+      data: await AuthService.SignUp({ ...req.body, deviceId: req.deviceId })
     }).send(res)
   }
 
   login = async (req, res, next) => {
     new OK({
       message: 'login success',
-      data: await AuthService.login({ ...req.body })
+      data: await AuthService.login({ ...req.body, deviceId: req.deviceId })
     }).send(res)
   }
 

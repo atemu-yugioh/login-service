@@ -11,7 +11,12 @@ class AuthService {
   constructor() {}
 
   // Sign up
-  static SignUp = async ({ email, name, password, phone, roles = ['user'], ...other }) => {
+  static SignUp = async ({ email, name, password, phone, roles = ['user'], deviceId, ...other }) => {
+    // check device Id 1 lan nua
+    if (!deviceId) {
+      throw new BadRequestError('Device id required')
+    }
+
     // check user exist
     const userFound = await authRepositories.findByEmail(email)
 
@@ -43,7 +48,8 @@ class AuthService {
       const { _id: userId } = newUser
       const { accessToken, refreshToken } = await createTokenPair(
         {
-          userId: userId,
+          deviceId,
+          userId,
           email
         },
         publicKey,
@@ -52,6 +58,7 @@ class AuthService {
 
       // save SessionToken
       const sessionToken = await sessionTokenRepositories.createSessionToken({
+        deviceId,
         userId: userId,
         publicKey,
         privateKey,
@@ -78,7 +85,12 @@ class AuthService {
   }
 
   // Login
-  static login = async ({ email, password }) => {
+  static login = async ({ deviceId, email, password }) => {
+    // check device id
+    if (!deviceId) {
+      throw new BadRequestError('Device Id required')
+    }
+
     // check user exist
     const userFound = await authRepositories.findByEmail(email)
 
@@ -97,10 +109,11 @@ class AuthService {
 
     // generate token pair
     const { _id: userId } = userFound
-    const { accessToken, refreshToken } = await createTokenPair({ userId: userId, email }, publicKey, privateKey)
+    const { accessToken, refreshToken } = await createTokenPair({ deviceId, userId, email }, publicKey, privateKey)
 
     // create or update sessionToken
     const sessionToken = await sessionTokenRepositories.createSessionToken({
+      deviceId,
       userId,
       publicKey,
       privateKey,
@@ -128,7 +141,7 @@ class AuthService {
   // logout
   static logout = async (sessionToken) => {
     // remove all SessionToken
-    const delKey = await SessionTokenService.removeKeyById(sessionToken._id)
+    const delKey = await SessionTokenService.deleteByDeviceId(sessionToken.deviceId)
 
     return delKey
   }
@@ -155,16 +168,16 @@ class AuthService {
       throw new AuthFailureError('User not registered')
     }
 
-    const { publicKey, privateKey } = sessionToken
+    const { publicKey, privateKey, deviceId } = sessionToken
     // generate new token pair
     const { accessToken, refreshToken: newRefreshToken } = await createTokenPair(
-      { userId, email },
+      { userId, email, deviceId },
       publicKey,
       privateKey
     )
 
     // update token
-    await sessionTokenRepositories.updateRefreshTokenByUserId({ userId, refreshToken, newRefreshToken })
+    await sessionTokenRepositories.updateRefreshTokenByUserId({ deviceId, userId, refreshToken, newRefreshToken })
 
     return {
       user: { userId, email },

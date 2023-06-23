@@ -10,6 +10,10 @@ const SessionTokenSchema = Schema(
       required: true,
       ref: 'User'
     },
+    deviceId: {
+      type: String,
+      required: true
+    },
     publicKey: {
       type: String,
       required: true
