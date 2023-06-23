@@ -3,7 +3,8 @@ const HEADER = {
   AUTHORIZATION: 'authorization',
   CLIENT_ID: 'x-client-id',
   REFRESHTOKEN: 'x-rtoken-id',
-  API_KEY: 'x-api-key'
+  API_KEY: 'x-api-key',
+  DEVICE_ID: 'x-device-id'
 }
 
 module.exports = {

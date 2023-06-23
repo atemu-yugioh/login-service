@@ -1,16 +1,24 @@
-const { findByUserId, removeKeyById, deleteKeyBuUserId } = require('../models/repositories/SessionToken.repositories')
+const {
+  deleteByDeviceId,
+  deleteKeyByUserId,
+  findByUserIdAndDeviceId
+} = require('../models/repositories/SessionToken.repositories')
 
 class SessionTokenService {
-  static findByUserId = async (userId) => {
-    return await findByUserId(userId)
+  static findByUserIdAndDeviceId = async ({ userId, deviceId }) => {
+    return await findByUserIdAndDeviceId({ userId, deviceId })
   }
 
-  static removeKeyById = async (id) => {
-    return await removeKeyById(id)
+  static removeDeviceId = async (id) => {
+    return await removeDeviceId(id)
+  }
+
+  static deleteByDeviceId = async (deviceId) => {
+    return await deleteByDeviceId(deviceId)
   }
 
   static deleteKeyByUserId = async (userId) => {
-    return await deleteKeyBuUserId(userId)
+    return await deleteKeyByUserId(userId)
   }
 
   static updateRefreshTokenByUserId = ({ userId, refreshToken }) => {
