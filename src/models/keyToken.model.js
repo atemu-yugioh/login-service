@@ -26,6 +26,10 @@ const keyTokenSchema = Schema(
       type: [String],
       default: []
     },
+    deviceId: {
+      type: String,
+      required: true
+    },
     createdBy: {
       type: Schema.Types.ObjectId,
       required: true,

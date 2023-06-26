@@ -50,7 +50,11 @@ const createHEXKey = () => {
 }
 
 const verifyJWT = async (token, secretKey) => {
-  return await JWT.verify(token, secretKey)
+  try {
+    return await JWT.verify(token, secretKey)
+  } catch (error) {
+    return null
+  }
 }
 
 const hashedPassword = (password) => {
