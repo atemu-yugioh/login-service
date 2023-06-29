@@ -6,6 +6,10 @@ class SuccessResponse {
     this.message = message ? message : reasonPhrases
     this.data = data
   }
+
+  send(res, headers = {}) {
+    res.status(this.status).json(this)
+  }
 }
 
 class OK extends SuccessResponse {
