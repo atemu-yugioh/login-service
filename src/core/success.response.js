@@ -20,7 +20,7 @@ class OK extends SuccessResponse {
 
 class CREATED extends SuccessResponse {
   constructor({ status = StatusCodes.CREATED, message, data, reasonPhrases = ReasonPhrases.CREATED, option = {} }) {
-    super(status, message, data, reasonPhrases)
+    super({ status, message, data, reasonPhrases })
     this.option = option
   }
 }
