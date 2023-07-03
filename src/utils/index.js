@@ -36,7 +36,7 @@ const unGetInfoData = ({ object = {}, fields = [] }) => {
 }
 
 const getSelectField = (setlectFields = []) => {
-  return Object.fromEntries(setlectedFields.map((el) => [el, 1]))
+  return Object.fromEntries(setlectFields.map((el) => [el, 1]))
 }
 
 const unGetSelectField = (unGetSelectFields = []) => {

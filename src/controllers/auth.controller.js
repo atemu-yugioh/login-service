@@ -3,8 +3,6 @@ const { createRsaKey, createHexKey } = require('../utils/auth.utils')
 
 class AuthController {
   signUp = async (req, res, next) => {
-    const a = req.body.obj.a.c
-    console.log(a)
     new CREATED({
       message: 'sign up success',
       data: createRsaKey()
@@ -12,6 +10,27 @@ class AuthController {
   }
 
   login = async (req, res, next) => {
+    new OK({
+      message: 'login success',
+      data: createHexKey()
+    }).send(res)
+  }
+
+  logout = async (req, res, next) => {
+    new OK({
+      message: 'login success',
+      data: createHexKey()
+    }).send(res)
+  }
+
+  handleRefreshToken = async (req, res, next) => {
+    new OK({
+      message: 'login success',
+      data: createHexKey()
+    }).send(res)
+  }
+
+  changePassWord = async (req, res, next) => {
     new OK({
       message: 'login success',
       data: createHexKey()

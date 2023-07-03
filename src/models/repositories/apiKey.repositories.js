@@ -10,6 +10,11 @@ const create = async ({
   return await apiKeyModel.create({ key, permissions, createdBy, modifiedBy })
 }
 
+const getByKey = async (key) => {
+  return await apiKeyModel.findOne({ key }).lean()
+}
+
 module.exports = {
-  create
+  create,
+  getByKey
 }
