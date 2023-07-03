@@ -1,5 +1,5 @@
 const { BadRequestError } = require('../core/error.response')
-const { findByEmail, create } = require('../models/repositories/user.repositories')
+const { findByEmail, create, findById } = require('../models/repositories/user.repositories')
 const { generateObjectMongodb, getInfoData } = require('../utils')
 const { hashPassWord, createHexKey, createPairToken, comparePassword } = require('../utils/auth.utils')
 const SessionService = require('./session.service')
@@ -118,6 +118,21 @@ class AuthService {
         fields: selectFields
       })
     }
+  }
+
+  static logout = async ({ session }) => {
+    return await SessionService.deleteById(session._id)
+  }
+
+  static findById = async (id) => {
+    const userFound = await findById(id)
+
+    return userFound
+      ? getInfoData({
+          object: userFound,
+          fields: selectFields
+        })
+      : null
   }
 }
 

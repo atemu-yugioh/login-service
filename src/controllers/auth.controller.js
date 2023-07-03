@@ -20,7 +20,7 @@ class AuthController {
   logout = async (req, res, next) => {
     new OK({
       message: 'login success',
-      data: createHexKey()
+      data: await AuthService.logout({ session: req.session })
     }).send(res)
   }
 
