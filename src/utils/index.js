@@ -59,5 +59,6 @@ module.exports = {
   getSelectField,
   unGetSelectField,
   removeUndefinedFieldObject,
-  convertToObjectMongodbId
+  convertToObjectMongodbId,
+  generateObjectMongodb
 }

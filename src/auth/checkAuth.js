@@ -1,10 +1,10 @@
 const { HEADER } = require('../configs/constant.config')
-const { ForbiddenError } = require('../core/error.response')
+const { ForbiddenError, BadRequestError } = require('../core/error.response')
 const asyncHandler = require('../helper/asyncHandler')
 const ApiKeyService = require('../services/apiKey.service')
 
 const requiredApiKey = asyncHandler(async (req, res, next) => {
-  const key = req.headers[HEADER.X_API_KEY]?.toString()
+  const key = req.headers[HEADER.API_KEY]?.toString()
 
   if (!key) {
     throw new ForbiddenError('Access denied. Api key is required !!')
@@ -33,7 +33,19 @@ const requiredPermission = (permission) => {
   })
 }
 
+const requiredDeviceId = asyncHandler(async (req, res, next) => {
+  const deviceId = req.headers[HEADER.DEVICE_ID]
+
+  if (!deviceId) {
+    throw new BadRequestError('Error: DeviceId is required !!!')
+  }
+
+  req.deviceId = deviceId
+  return next()
+})
+
 module.exports = {
   requiredApiKey,
-  requiredPermission
+  requiredPermission,
+  requiredDeviceId
 }

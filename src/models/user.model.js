@@ -28,11 +28,15 @@ const userSchema = new Schema(
     },
     phone: {
       type: String,
-      default: ''
+      required: true
     },
     birthDay: {
       type: String,
       default: ''
+    },
+    roles: {
+      type: [String],
+      default: ['user']
     },
     isDisable: {
       type: Boolean,
