@@ -13,7 +13,7 @@ class AuthController {
   login = async (req, res, next) => {
     new OK({
       message: 'login success',
-      data: createHexKey()
+      data: await AuthService.login({ ...req.body, deviceId: req.deviceId })
     }).send(res)
   }
 

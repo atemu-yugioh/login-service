@@ -4,7 +4,7 @@ const asyncHandler = require('../../helper/asyncHandler')
 const { requiredDeviceId } = require('../../auth/checkAuth')
 const router = express.Router()
 
-router.post('/register', requiredDeviceId, asyncHandler(authController.signUp))
+router.post('/register', asyncHandler(authController.signUp))
 
 router.post('/login', asyncHandler(authController.login))
 
