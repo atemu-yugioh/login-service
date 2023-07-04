@@ -27,7 +27,7 @@ class AuthController {
   handleRefreshToken = async (req, res, next) => {
     new OK({
       message: 'login success',
-      data: createHexKey()
+      data: await AuthService.handleRefreshToken({ ...req })
     }).send(res)
   }
 

@@ -1,4 +1,5 @@
-const { BadRequestError } = require('../core/error.response')
+const { BadRequestError, AuthFailError } = require('../core/error.response')
+const { deleteByUserId } = require('../models/repositories/session.repositories')
 const { findByEmail, create, findById } = require('../models/repositories/user.repositories')
 const { generateObjectMongodb, getInfoData } = require('../utils')
 const { hashPassWord, createHexKey, createPairToken, comparePassword } = require('../utils/auth.utils')
@@ -50,8 +51,8 @@ class AuthService {
         privateKey,
         refreshToken,
         deviceId,
-        createdby: _id,
-        modifiedby: _id
+        createdBy: _id,
+        modifiedBy: _id
       })
 
       if (!newSession) {
@@ -100,8 +101,8 @@ class AuthService {
       privateKey,
       deviceId,
       refreshToken,
-      createdby: userId,
-      modifiedby: userId
+      createdBy: userId,
+      modifiedBy: userId
     })
 
     if (!newSession) {
@@ -122,6 +123,47 @@ class AuthService {
 
   static logout = async ({ session }) => {
     return await SessionService.deleteById(session._id)
+  }
+
+  static handleRefreshToken = async ({ user, session, refreshToken }) => {
+    const { userId, email, deviceId } = user
+    const { publicKey, privateKey, refreshToken: refreshTokenStore, refreshTokenUsed } = session
+
+    // check user exist
+    const userFound = await findByEmail(email)
+
+    if (!userFound) {
+      throw new AuthFailError('User invalid, pls re-login')
+    }
+
+    // check refreshToken đã được sử dụng chưa
+    if (refreshTokenUsed.includes(refreshToken)) {
+      // đã có người dùng nó để refresh rồi => xóa hết session
+      // login lại cho an toàn => nếu là người dùng thật sự sẽ login lại được
+      await SessionService.deleteByUserId(userId)
+      throw new AuthFailError('Something went wrong, pls login')
+    }
+
+    // check refreshToken === refreshTokenStore
+    if (refreshToken !== refreshTokenStore) {
+      // nếu đã gửi refreshToken rồi mà còn sai nữa thì chỉ có login lại
+      // nếu là user sẽ login lại được
+      throw new AuthFailError('RefreshToken invalid, pls re-login')
+    }
+
+    // create new pair token
+    const token = await createPairToken({ userId, email, deviceId }, publicKey, privateKey)
+
+    // push refreshToken to refreshTokenUsed
+    await SessionService.saveToRefreshTokenUsed({ ...session, newRefreshToken: token.refreshToken })
+
+    return {
+      token,
+      user: getInfoData({
+        object: userFound,
+        fields: selectFields
+      })
+    }
   }
 
   static findById = async (id) => {

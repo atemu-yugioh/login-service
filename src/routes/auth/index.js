@@ -9,13 +9,13 @@ router.post('/register', asyncHandler(authController.signUp))
 
 router.post('/login', asyncHandler(authController.login))
 
-//// Required Authentication
+// ---- Required Authentication ----- ///
 
 router.use(authentication)
 
 router.post('/logout', asyncHandler(authController.logout))
 
-router.post('/handleRefreshToken', asyncHandler(authController.handleRefreshToken))
+router.post('/handle-refresh-token', asyncHandler(authController.handleRefreshToken))
 
 router.post('/change-password', asyncHandler(authController.changePassWord))
 

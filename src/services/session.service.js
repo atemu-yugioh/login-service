@@ -1,8 +1,14 @@
-const { create, findByUserIdAndDeviceId, deleteById } = require('../models/repositories/session.repositories')
+const {
+  create,
+  findByUserIdAndDeviceId,
+  deleteById,
+  deleteByUserId,
+  saveToRefreshTokenUsed
+} = require('../models/repositories/session.repositories')
 
 class SessionService {
-  static create = async ({ userId, publicKey, privateKey, refreshToken, deviceId, createdby, modifiedby }) => {
-    const newSession = await create({ userId, publicKey, privateKey, refreshToken, deviceId, createdby, modifiedby })
+  static create = async ({ userId, publicKey, privateKey, refreshToken, deviceId, createdBy, modifiedBy }) => {
+    const newSession = await create({ userId, publicKey, privateKey, refreshToken, deviceId, createdBy, modifiedBy })
 
     return newSession
   }
@@ -15,6 +21,14 @@ class SessionService {
 
   static deleteById = async (id) => {
     return await deleteById(id)
+  }
+
+  static deleteByUserId = async (userId) => {
+    return await deleteByUserId(userId)
+  }
+
+  static saveToRefreshTokenUsed = async (session) => {
+    return await saveToRefreshTokenUsed(session)
   }
 }
 

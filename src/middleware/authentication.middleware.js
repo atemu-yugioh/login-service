@@ -30,7 +30,7 @@ const authentication = asyncHandler(async (req, res, next) => {
   const sessionFound = await SessionService.findByUserIdAndDeviceId(userId, deviceId)
 
   if (!sessionFound) {
-    throw new AuthFailError('Auth fail::: User not registered !!!')
+    throw new AuthFailError('Auth fail::: pls login')
   }
 
   // check refresh token
