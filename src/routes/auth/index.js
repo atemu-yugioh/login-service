@@ -17,6 +17,6 @@ router.post('/logout', asyncHandler(authController.logout))
 
 router.post('/handle-refresh-token', asyncHandler(authController.handleRefreshToken))
 
-router.post('/change-password', asyncHandler(authController.changePassWord))
+router.patch('/change-password', asyncHandler(authController.changePassWord))
 
 module.exports = router

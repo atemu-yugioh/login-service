@@ -1,8 +1,10 @@
 const JWT = require('jsonwebtoken')
 const crypto = require('crypto')
 const bcrypt = require('bcrypt')
+const { BadRequestError } = require('../core/error.response')
 
 const createPairToken = async (payload, publicKey, privateKey) => {
+  console.log('🚀 ~ file: auth.utils.js:7 ~ createPairToken ~ publicKey, privateKey:', publicKey, privateKey)
   try {
     const accessToken = await JWT.sign(payload, publicKey, { expiresIn: '2d' })
 
@@ -17,7 +19,9 @@ const createPairToken = async (payload, publicKey, privateKey) => {
     })
 
     return { accessToken, refreshToken }
-  } catch (error) {}
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 const createRsaKey = () => {

@@ -19,22 +19,22 @@ class AuthController {
 
   logout = async (req, res, next) => {
     new OK({
-      message: 'login success',
+      message: 'logout success',
       data: await AuthService.logout({ session: req.session })
     }).send(res)
   }
 
   handleRefreshToken = async (req, res, next) => {
     new OK({
-      message: 'login success',
+      message: 'get token success',
       data: await AuthService.handleRefreshToken({ ...req })
     }).send(res)
   }
 
   changePassWord = async (req, res, next) => {
     new OK({
-      message: 'login success',
-      data: createHexKey()
+      message: 'change password success',
+      data: await AuthService.changePassword({ ...req, ...req.body })
     }).send(res)
   }
 }

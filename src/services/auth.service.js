@@ -1,6 +1,6 @@
 const { BadRequestError, AuthFailError } = require('../core/error.response')
 const { deleteByUserId } = require('../models/repositories/session.repositories')
-const { findByEmail, create, findById } = require('../models/repositories/user.repositories')
+const { findByEmail, create, findById, updatePassword } = require('../models/repositories/user.repositories')
 const { generateObjectMongodb, getInfoData } = require('../utils')
 const { hashPassWord, createHexKey, createPairToken, comparePassword } = require('../utils/auth.utils')
 const SessionService = require('./session.service')
@@ -159,6 +159,76 @@ class AuthService {
 
     return {
       token,
+      user: getInfoData({
+        object: userFound,
+        fields: selectFields
+      })
+    }
+  }
+
+  static changePassword = async ({ user, password, newPassword, confirmPassword }) => {
+    const { userId, email, deviceId } = user
+
+    // check at middleware
+    if (!password || !newPassword || !confirmPassword) {
+      throw new BadRequestError('Error::: miss field')
+    }
+
+    // check user exist
+    const userFound = await findByEmail(email)
+
+    if (!userFound) {
+      throw new BadRequestError('Error::: User not registered !!!')
+    }
+
+    // check password correct
+    const isMatch = await comparePassword(password, userFound.password)
+
+    if (!isMatch) {
+      throw new BadRequestError('Error::: password incorret !!!')
+    }
+
+    // hashed new password
+    const newPasswordHashed = await hashPassWord(newPassword)
+
+    // trường hợp có người đang dùng tài khoản user ở 1 nơi khác
+    // người dùng cần đổi password để không cho người kia thao tác nữa
+    // nên cần clear all session của user
+    await SessionService.deleteByUserId(userId)
+
+    // create newPublicKey and newPrivateKey
+    const { publicKey: newPublicKey, privateKey: newPrivateKey } = createHexKey()
+
+    // create new pair token
+    const { accessToken, refreshToken } = await createPairToken(
+      { userId, email, deviceId },
+      newPublicKey,
+      newPrivateKey
+    )
+
+    // create new Session for user
+    const newSession = await SessionService.create({
+      userId,
+      publicKey: newPublicKey,
+      privateKey: newPrivateKey,
+      refreshToken,
+      deviceId,
+      createdBy: userId,
+      modifiedBy: userId
+    })
+
+    if (!newSession) {
+      throw new BadRequestError('Error: Something went wrong !!!')
+    }
+
+    // thành công hết thì mới update password
+    await updatePassword(userId, newPasswordHashed)
+
+    return {
+      token: {
+        accessToken,
+        refreshToken
+      },
       user: getInfoData({
         object: userFound,
         fields: selectFields
