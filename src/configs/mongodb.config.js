@@ -8,6 +8,10 @@ const dev = {
     host: process.env.DEV_DB_HOST || 'localhost',
     port: process.env.DEV_DB_PORT || 9999,
     name: process.env.DEV_DDB_NAME || 'authDev'
+  },
+  discord: {
+    token: process.env.DISCORD_TOKEN || '',
+    channel: process.env.DISCORD_CHANNEL || ''
   }
 }
 
@@ -19,6 +23,9 @@ const pro = {
     host: process.env.DB_HOST || 'localhost',
     port: process.env.DB_PORT || 9999,
     name: process.env.DDB_NAME || 'authPro'
+  },
+  discord: {
+    token: process.env.DISCORD_TOKEN || ''
   }
 }
 

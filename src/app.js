@@ -2,6 +2,7 @@ const compression = require('compression')
 const morgan = require('morgan')
 const { default: helmet } = require('helmet')
 const express = require('express')
+const Logger = require('./logger/discord.log.v2')
 
 const app = express()
 
@@ -26,6 +27,12 @@ app.use((req, res, next) => {
 })
 
 app.use((error, req, res, next) => {
+  Logger.sendToFormatCode({
+    colorHex: 'e03116',
+    title: `Method: ${req.method}`,
+    code: error.message || 'Internal Server Error',
+    message: `$${req.get('host')}${req.originalUrl}`
+  })
   const statusCode = error.status || 500
   return res.status(statusCode).json({
     status: statusCode,

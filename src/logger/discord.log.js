@@ -1,6 +1,9 @@
 'use strict'
 
 const { Client, GatewayIntentBits } = require('discord.js')
+const {
+  discord: { token }
+} = require('../configs/mongodb.config')
 
 const client = new Client({
   intents: [
@@ -15,7 +18,6 @@ client.on('ready', () => {
   console.log(`Logged is as ${client.user.tag}!`)
 })
 
-const token = 'MTEzMDQ0MjY0MTQ4MjQ1MzAzMg.GAAcVe.hGGXknZBu5RQXH1wOJltfIVy_5-b7O6h348r5U'
 client.login(token)
 
 client.on('messageCreate', (msg) => {
