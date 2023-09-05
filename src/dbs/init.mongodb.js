@@ -1,10 +1,11 @@
 const mongoose = require('mongoose')
 const {
   db: { host, port, name }
-} = require('../configs/config.mongodb')
+} = require('../configs/config.mongoose')
 
 const connectionString = `mongodb://${host}:${port}/${name}`
-class Database {
+
+class MongoDB {
   constructor() {
     this.connect()
   }
@@ -17,23 +18,23 @@ class Database {
 
     mongoose
       .connect(connectionString)
-      .then((_) => {
-        console.log('Connect databse success')
+      .then(() => {
+        console.log('Connected to mongodb')
       })
-      .catch((error) => {
-        console.log('Unable connect to database')
+      .catch(() => {
+        console.log('Unable connect to mongodb')
       })
   }
 
-  static getInstance() {
-    if (!Database.instance) {
-      Database.instance = new Database()
+  static getInstance = () => {
+    if (!MongoDB.instance) {
+      MongoDB.instance = new MongoDB()
     }
 
-    return Database.instance
+    return MongoDB.instance
   }
 }
 
-const instanceMongodb = Database.getInstance()
+const instanceMongoDB = MongoDB.getInstance()
 
-module.exports = instanceMongodb
+module.exports = instanceMongoDB
