@@ -1,7 +1,7 @@
 const app = require('./src/app')
 const {
   app: { port }
-} = require('./src/configs/config.mongodb')
+} = require('./src/configs/mongoose.config')
 
 const server = app.listen(port, () => {
   console.log('Server is running')
