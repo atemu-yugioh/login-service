@@ -1,5 +1,5 @@
 const { HEADER } = require('../configs/constant.config')
-const { ForbiddenError, AuthFailError } = require('../core/error.response')
+const { AuthFailError } = require('../core/error.response')
 const asyncHandler = require('../helpers/asyncHandler')
 const AuthService = require('../services/auth.service')
 const SessionService = require('../services/session.service')
