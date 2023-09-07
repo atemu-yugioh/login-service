@@ -19,6 +19,7 @@ const createHexKey = () => {
 }
 
 const createPairToken = async (payload, publicKey, privateKey) => {
+  console.log('🚀 ~ file: auth.utils.js:22 ~ createPairToken ~ payload:', payload)
   try {
     const accessToken = await JWT.sign(payload, publicKey, { expiresIn: '2d' })
 

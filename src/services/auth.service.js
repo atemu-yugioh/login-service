@@ -1,5 +1,5 @@
 const { BadRequestError, AuthFailError } = require('../core/error.response')
-const { findByEmail, create, findById } = require('../models/repositories/user.repositories')
+const { findByEmail, create, findById, updatePassword } = require('../models/repositories/user.repositories')
 const sessionRepo = require('../models/repositories/session.repositories')
 const { hashPassword, createHexKey, createPairToken, comparePassword } = require('../utils/auth.utils')
 const { getInfoData, generateObjectMongodbId } = require('../utils')
@@ -124,11 +124,6 @@ class AuthService {
     const { userId, email, deviceId } = user
     const { publicKey, privateKey, refreshToken: refreshTokenStore, refreshTokenUsed } = session
 
-    // check refreshToken  === refreshTokenStore
-    if (refreshToken !== refreshTokenStore) {
-      throw new AuthFailError('RefreshToken invalid,pls re-login')
-    }
-
     // check user exist
     const userFound = await findByEmail(email)
 
@@ -144,8 +139,13 @@ class AuthService {
       throw new AuthFailError('Something went wrong, pls login')
     }
 
+    // check refreshToken  === refreshTokenStore
+    if (refreshToken !== refreshTokenStore) {
+      throw new AuthFailError('RefreshToken invalid,pls re-login')
+    }
+
     // create pair token
-    const token = await createPairToken(user, publicKey, privateKey)
+    const token = await createPairToken({ userId, email, deviceId }, publicKey, privateKey)
 
     // push refreshToken to refreshTokenUsed
     await sessionRepo.saveToRefreshTokenUsed({ ...session, newRefreshToken: token.refreshToken })
@@ -156,6 +156,67 @@ class AuthService {
         object: userFound,
         fields: selectFields
       })
+    }
+  }
+
+  static changePassword = async ({ user, password, newPassword, confirmPassword }) => {
+    const { userId, email, deviceId } = user
+
+    // check at middleware
+    if (!password || !newPassword || !confirmPassword) {
+      throw new BadRequestError('Error:: miss field')
+    }
+
+    // check user exist
+    const userFound = await findByEmail(email)
+
+    if (!userFound) {
+      throw new BadRequestError('Error:: user not registered!!')
+    }
+
+    // check valid password
+    const isMatch = await comparePassword(password, userFound.password)
+
+    if (!isMatch) {
+      throw new BadRequestError('Error: password wrong')
+    }
+
+    // hashed new password
+    const newPasswordHashed = await hashPassword(newPassword)
+
+    // clear all session
+    await sessionRepo.deleteByUserId(userId)
+
+    // create public key and private key
+    const { publicKey, privateKey } = createHexKey()
+
+    // create new pair token
+    const { accessToken, refreshToken } = await createPairToken({ userId, email, deviceId }, publicKey, privateKey)
+
+    // create new session
+    const newSession = sessionRepo.create({
+      userId,
+      publicKey,
+      privateKey,
+      refreshToken,
+      createdBy: userId,
+      modifiedBy: userId,
+      deviceId
+    })
+
+    if (!newSession) {
+      throw new BadRequestError('Error:: Session fail')
+    }
+
+    // update password
+    await updatePassword(userId, newPasswordHashed)
+
+    return {
+      token: {
+        accessToken,
+        refreshToken
+      },
+      user: getInfoData({ object: userFound, fields: selectFields })
     }
   }
 

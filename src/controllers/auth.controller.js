@@ -22,6 +22,20 @@ class AuthController {
       data: await AuthService.logout({ ...req.session })
     }).send(res)
   }
+
+  handleRefreshToken = async (req, res, next) => {
+    new OK({
+      message: 'Success',
+      data: await AuthService.handleRefreshToken({ ...req })
+    }).send(res)
+  }
+
+  changePassword = async (req, res, next) => {
+    new OK({
+      message: 'Success',
+      data: await AuthService.changePassword({ user: req.user, ...req.body })
+    }).send(res)
+  }
 }
 
 module.exports = new AuthController()
