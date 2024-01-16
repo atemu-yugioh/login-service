@@ -28,6 +28,8 @@
     "lodash": "^4.17.21",
     "mongoose": "^7.2.4",
     "morgan": "^1.10.0",
-    "nodemon": "^2.0.22"
+    "nodemailer": "^6.9.8",
+    "nodemon": "^2.0.22",
+    "smtp-server": "^3.13.0"
   }
 }
