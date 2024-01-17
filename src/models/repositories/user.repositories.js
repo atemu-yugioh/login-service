@@ -30,9 +30,28 @@ const updatePassword = async (userId, password) => {
   return await userModel.updateOne(filter, updateSet, option)
 }
 
+const enable2FA = async (userId, is2FAEnabled = true, secretKeyOTP = null) => {
+  const filter = { _id: convertToObjectMongodbId(userId) }
+
+  const updateSet = {
+    $set: {
+      is2FAEnabled,
+      secretKeyOTP
+    }
+  }
+
+  const option = {
+    upsert: true,
+    new: true
+  }
+
+  return await userModel.updateOne(filter, updateSet, option)
+}
+
 module.exports = {
   create,
   findByEmail,
   findById,
-  updatePassword
+  updatePassword,
+  enable2FA
 }

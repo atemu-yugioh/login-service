@@ -1,10 +1,11 @@
 const { BadRequestError, AuthFailError } = require('../core/error.response')
-const { findByEmail, create, findById, updatePassword } = require('../models/repositories/user.repositories')
+const { findByEmail, create, findById, updatePassword, enable2FA } = require('../models/repositories/user.repositories')
 const sessionRepo = require('../models/repositories/session.repositories')
 const { hashPassword, createHexKey, createPairToken, comparePassword } = require('../utils/auth.utils')
 const { getInfoData, generateObjectMongodbId } = require('../utils')
+const { generateUniqueSecret, generateOTPToken, generateQRCode, verifyOTPToken } = require('../helpers/2FA/2fa.helper')
 
-const selectFields = ['name', 'email', 'phone', 'address', 'birthDay', 'avatar']
+const selectFields = ['name', 'email', 'phone', 'address', 'birthDay', 'avatar', 'is2FAEnabled']
 class AuthService {
   static signUp = async ({ name, email, password, phone, deviceId, ...other }) => {
     // check exist user
@@ -224,6 +225,59 @@ class AuthService {
     const userFound = await findById(id)
 
     return userFound ? getInfoData({ object: userFound, fields: selectFields }) : null
+  }
+
+  static enable2FA = async (id) => {
+    const userFound = await findById(id)
+
+    if (!userFound) {
+      throw new BadRequestError('user not exist!!')
+    }
+
+    // 2fa is enabling => return true
+    if (userFound.is2FAEnabled) {
+      throw new BadRequestError('2fa is enabling')
+    }
+
+    // 2fa first enable
+    if (!userFound.secretKeyOTP) {
+      const secretKeyOTP = generateUniqueSecret()
+      userFound.secretKeyOTP = secretKeyOTP
+    }
+
+    const optAuth = generateOTPToken(userFound._id, 'loginService', userFound.secretKeyOTP)
+    const QRCodeImageUrl = await generateQRCode(optAuth)
+
+    // 2fa is off => update on
+    await enable2FA(userFound._id, true, userFound.secretKeyOTP)
+
+    return {
+      qrCode: QRCodeImageUrl
+    }
+  }
+
+  static disable2FA = async (id) => {
+    const userFound = await findById(id)
+
+    if (!userFound) {
+      throw new BadRequestError('user not exist!!')
+    }
+
+    return await enable2FA(id, false, userFound.secretKeyOTP)
+  }
+
+  static verify2FA = async (id, opt) => {
+    const userFound = await findById(id)
+
+    if (!userFound) {
+      throw new BadRequestError('user not exist!!')
+    }
+
+    const isValid = verifyOTPToken(opt, userFound.secretKeyOTP)
+
+    return {
+      isValid
+    }
   }
 }
 

@@ -20,5 +20,8 @@ router.use(authentication)
 router.post('/logout', asyncHandler(authController.logout))
 router.post('/handle-refresh-token', asyncHandler(authController.handleRefreshToken))
 router.patch('/change-password', validator(userChangePasswordSchema), asyncHandler(authController.changePassword))
+router.post('/enable-2fa', asyncHandler(authController.enable2FA))
+router.post('/disable-2fa', asyncHandler(authController.disable2FA))
+router.post('/verify-otp-2fa', asyncHandler(authController.verify2FA))
 
 module.exports = router

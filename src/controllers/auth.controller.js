@@ -36,6 +36,25 @@ class AuthController {
       data: await AuthService.changePassword({ user: req.user, ...req.body })
     }).send(res)
   }
+
+  enable2FA = async (req, res, next) => {
+    new OK({
+      message: 'Success',
+      data: await AuthService.enable2FA(req.user.userId)
+    }).send(res)
+  }
+  disable2FA = async (req, res, next) => {
+    new OK({
+      message: 'Success',
+      data: await AuthService.disable2FA(req.user.userId)
+    }).send(res)
+  }
+  verify2FA = async (req, res, next) => {
+    new OK({
+      message: 'Success',
+      data: await AuthService.verify2FA(req.user.userId, req.body.otp)
+    }).send(res)
+  }
 }
 
 module.exports = new AuthController()
