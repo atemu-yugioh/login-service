@@ -22,6 +22,14 @@ const userSchema = new Schema(
       type: String,
       required: true
     },
+    secretKeyOTP: {
+      type: String,
+      default: null
+    },
+    is2FAEnabled: {
+      type: Boolean,
+      default: false
+    },
     avatar: {
       type: String,
       default: ''
