@@ -37,10 +37,18 @@ class ForbiddenError extends ErrorResponse {
   }
 }
 
+class InputValidateError extends ErrorResponse {
+  constructor(errors = null, message = 'input validate fail', status = 422) {
+    super(message, status)
+    this.errors = errors
+  }
+}
+
 module.exports = {
   BadRequestError,
   NotFoundError,
   ConflictRequestError,
   AuthFailError,
-  ForbiddenError
+  ForbiddenError,
+  InputValidateError
 }
