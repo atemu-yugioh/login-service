@@ -9,6 +9,10 @@ class RedisService {
     return await redisClient.get(key)
   }
 
+  static deleteKey = async (key) => {
+    return await redisClient.del(key)
+  }
+
   static incr = async (key) => {
     return await redisClient.incr(key)
   }

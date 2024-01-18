@@ -2,6 +2,7 @@ const { HEADER } = require('../configs/constant.config')
 const { AuthFailError } = require('../core/error.response')
 const asyncHandler = require('../helpers/asyncHandler')
 const AuthService = require('../services/auth.service')
+const RedisService = require('../services/redis/redis.service')
 const SessionService = require('../services/session.service')
 const { verifyJWT } = require('../utils/auth.utils')
 
@@ -32,6 +33,12 @@ const authentication = asyncHandler(async (req, res, next) => {
 
   if (!sessionFound) {
     throw new AuthFailError('Auth fail::: Pls login !!!')
+  }
+
+  // check session invalid when 2fa enable
+  const sessionInvalid = await RedisService.getKey(`sessionInvalid:${sessionFound._id.toString()}`)
+  if (sessionInvalid) {
+    throw new AuthFailError('session fail !!!')
   }
 
   // check refresh token

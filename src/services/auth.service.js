@@ -4,6 +4,7 @@ const sessionRepo = require('../models/repositories/session.repositories')
 const { hashPassword, createHexKey, createPairToken, comparePassword } = require('../utils/auth.utils')
 const { getInfoData, generateObjectMongodbId } = require('../utils')
 const { generateUniqueSecret, generateOTPToken, generateQRCode, verifyOTPToken } = require('../helpers/2FA/2fa.helper')
+const RedisService = require('./redis/redis.service')
 
 const selectFields = ['name', 'email', 'phone', 'address', 'birthDay', 'avatar', 'is2FAEnabled']
 class AuthService {
@@ -91,7 +92,7 @@ class AuthService {
 
     // create accessToken and refreshToken
     const userId = userFound._id
-    const { accessToken, refreshToken } = await createPairToken({ userId, email, deviceId }, publicKey, privateKey)
+    let { accessToken, refreshToken } = await createPairToken({ userId, email, deviceId }, publicKey, privateKey)
 
     // create new session
     const newSession = await sessionRepo.create({
@@ -108,10 +109,23 @@ class AuthService {
       throw new BadRequestError('Error:: Session fail')
     }
 
+    // có bật bảo mật 2 lớp => return token null, session inactive
+    if (userFound.is2FAEnabled) {
+      await RedisService.setEx({
+        key: `sessionInvalid:${newSession._id.toString()}`,
+        value: newSession._id.toString(),
+        time: 60 * 5 // 5'
+      })
+    }
+
     return {
       token: {
         accessToken,
-        refreshToken
+        refreshToken,
+        session: {
+          id: newSession._id,
+          isValid: !userFound.is2FAEnabled
+        }
       },
       user: getInfoData({ object: userFound, fields: selectFields })
     }
@@ -266,14 +280,18 @@ class AuthService {
     return await enable2FA(id, false, userFound.secretKeyOTP)
   }
 
-  static verify2FA = async (id, opt) => {
+  static verify2FA = async ({ id, otp, sessionId }) => {
     const userFound = await findById(id)
 
     if (!userFound) {
       throw new BadRequestError('user not exist!!')
     }
 
-    const isValid = verifyOTPToken(opt, userFound.secretKeyOTP)
+    const isValid = verifyOTPToken(otp, userFound.secretKeyOTP)
+
+    if (isValid) {
+      await RedisService.deleteKey(`sessionInvalid:${sessionId}`)
+    }
 
     return {
       isValid

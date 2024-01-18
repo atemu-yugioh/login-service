@@ -1,3 +1,4 @@
+const { HEADER } = require('../configs/constant.config')
 const { CREATED, OK } = require('../core/success.response')
 const AuthService = require('../services/auth.service')
 
@@ -52,7 +53,7 @@ class AuthController {
   verify2FA = async (req, res, next) => {
     new OK({
       message: 'Success',
-      data: await AuthService.verify2FA(req.user.userId, req.body.otp)
+      data: await AuthService.verify2FA({ ...req.body, id: req.headers[HEADER.CLIENT_ID]?.toString() })
     }).send(res)
   }
 }

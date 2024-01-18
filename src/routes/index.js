@@ -13,5 +13,6 @@ router.use(requiredDevice)
 
 router.use('/api-key', require('./apiKey'))
 router.use('/auth', requiredPermission('auth'), require('./auth'))
+router.use('/user', require('./user'))
 
 module.exports = router

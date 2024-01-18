@@ -1,4 +1,4 @@
-const { create, findByUserIdAndSessionId } = require('../models/repositories/session.repositories')
+const { create, findByUserIdAndSessionId, deleteById } = require('../models/repositories/session.repositories')
 
 class SessionService {
   static create = async ({ userId, publicKey, privateKey, refreshToken, deviceId, createdBy, modifiedBy }) => {
