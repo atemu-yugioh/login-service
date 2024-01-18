@@ -44,11 +44,18 @@ class InputValidateError extends ErrorResponse {
   }
 }
 
+class TooManyRequestError extends ErrorResponse {
+  constructor(message = ReasonPhrases.TOO_MANY_REQUESTS, status = StatusCodes.TOO_MANY_REQUESTS) {
+    super(message, status)
+  }
+}
+
 module.exports = {
   BadRequestError,
   NotFoundError,
   ConflictRequestError,
   AuthFailError,
   ForbiddenError,
-  InputValidateError
+  InputValidateError,
+  TooManyRequestError
 }
