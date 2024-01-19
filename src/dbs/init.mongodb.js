@@ -12,7 +12,7 @@ class MongoDB {
   }
 
   connect() {
-    if (nodeEnv === 'dev') {
+    if ('dev' === 'dev') {
       mongoose.set('debug', true)
       mongoose.set('debug', { color: true })
     }
