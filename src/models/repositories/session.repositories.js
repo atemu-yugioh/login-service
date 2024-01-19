@@ -18,19 +18,19 @@ const create = async ({ userId, publicKey, privateKey, refreshToken, deviceId, c
     new: true
   }
 
-  return await sessionModel.findOneAndUpdate(filter, updateSet, option)
+  return sessionModel.findOneAndUpdate(filter, updateSet, option)
 }
 
 const deleteById = async (id) => {
-  return await sessionModel.deleteOne({ _id: id })
+  return sessionModel.deleteOne({ _id: id })
 }
 
 const deleteByUserId = async (userId) => {
-  return await sessionModel.deleteMany({ user: convertToObjectMongodbId(userId) })
+  return sessionModel.deleteMany({ user: convertToObjectMongodbId(userId) })
 }
 
 const findByUserIdAndSessionId = async (userId, deviceId) => {
-  return await sessionModel.findOne({ user: userId, deviceId }).lean()
+  return sessionModel.findOne({ user: userId, deviceId }).lean()
 }
 
 const saveToRefreshTokenUsed = async ({ refreshToken, _id, newRefreshToken }) => {
@@ -50,7 +50,7 @@ const saveToRefreshTokenUsed = async ({ refreshToken, _id, newRefreshToken }) =>
     new: true
   }
 
-  return await sessionModel.updateOne(filter, updateSet, option)
+  return sessionModel.updateOne(filter, updateSet, option)
 }
 
 module.exports = {

@@ -35,7 +35,7 @@ class SMTPMailer {
   }
 
   createAccount = async () => {
-    return await nodemailer.createTestAccount()
+    return nodemailer.createTestAccount()
   }
 
   createTransporter = async () => {

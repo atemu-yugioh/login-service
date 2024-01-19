@@ -70,6 +70,14 @@ class AuthService {
         })
       }
     }
+
+    return {
+      token: {
+        accessToken: null,
+        refreshToken: null
+      },
+      user: null
+    }
   }
 
   static login = async ({ deviceId, email, password }) => {
@@ -92,7 +100,7 @@ class AuthService {
 
     // create accessToken and refreshToken
     const userId = userFound._id
-    let { accessToken, refreshToken } = await createPairToken({ userId, email, deviceId }, publicKey, privateKey)
+    const { accessToken, refreshToken } = await createPairToken({ userId, email, deviceId }, publicKey, privateKey)
 
     // create new session
     const newSession = await sessionRepo.create({
@@ -132,7 +140,7 @@ class AuthService {
   }
 
   static logout = async (session) => {
-    return await sessionRepo.deleteById(session._id)
+    return sessionRepo.deleteById(session._id)
   }
 
   static handleRefreshToken = async ({ user, session, refreshToken }) => {
@@ -277,7 +285,7 @@ class AuthService {
       throw new BadRequestError('user not exist!!')
     }
 
-    return await enable2FA(id, false, userFound.secretKeyOTP)
+    return enable2FA(id, false, userFound.secretKeyOTP)
   }
 
   static verify2FA = async ({ id, otp, sessionId }) => {

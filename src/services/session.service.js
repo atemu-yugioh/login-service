@@ -10,7 +10,7 @@ class SessionService {
   static findByUserIdAndDeviceId = async (userId, deviceId) => {
     const sessionFound = await findByUserIdAndSessionId(userId, deviceId)
 
-    return sessionFound ? sessionFound : null
+    return sessionFound || null
   }
 }
 

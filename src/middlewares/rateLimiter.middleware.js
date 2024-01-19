@@ -15,7 +15,7 @@ const rateLimiter = (secondsLimit, limitAmount) => {
         throw new TooManyRequestError(`too many requests in ${secondsLimit}s. try again later`)
       }
 
-      next()
+      return next()
     } catch (error) {
       return next(error)
     }
