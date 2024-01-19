@@ -6,11 +6,11 @@ const create = async ({ _id, name, email, password, phone, createdBy, modifiedBy
 }
 
 const findByEmail = async (email) => {
-  return await userModel.findOne({ email }).lean()
+  return userModel.findOne({ email }).lean()
 }
 
 const findById = async (id) => {
-  return await userModel.findById(id).lean()
+  return userModel.findById(id).lean()
 }
 
 const updatePassword = async (userId, password) => {
@@ -27,7 +27,7 @@ const updatePassword = async (userId, password) => {
     new: true
   }
 
-  return await userModel.updateOne(filter, updateSet, option)
+  return userModel.updateOne(filter, updateSet, option)
 }
 
 const enable2FA = async (userId, is2FAEnabled = true, secretKeyOTP = null) => {
@@ -45,7 +45,7 @@ const enable2FA = async (userId, is2FAEnabled = true, secretKeyOTP = null) => {
     new: true
   }
 
-  return await userModel.updateOne(filter, updateSet, option)
+  return userModel.updateOne(filter, updateSet, option)
 }
 
 module.exports = {

@@ -4,7 +4,7 @@ const redisPubSubService = require('./redisPubSub.service')
 const patterns = ['__keyevent@0__:expired']
 
 const objectHandleEvent = {
-  ['__keyevent@0__:expired']: ExpiredEventService.handleExpiredEvent
+  '__keyevent@0__:expired': ExpiredEventService.handleExpiredEvent
 }
 
 class RedisSubEvent {
@@ -15,7 +15,7 @@ class RedisSubEvent {
   }
 
   static handlerEvent = async (channel, message) => {
-    return await objectHandleEvent[channel](message)
+    return objectHandleEvent[channel](message)
   }
 }
 

@@ -8,6 +8,7 @@ const {
   userLoginSchema,
   userChangePasswordSchema
 } = require('../../helpers/validations/input/schemas/auth')
+
 const router = express.Router()
 
 router.post('/register', validator(userRegisterSchema), asyncHandler(authController.signUp))

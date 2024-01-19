@@ -11,7 +11,8 @@ const dev = {
   },
   dbRedis: {
     url: process.env.REDIS_URL || 'redis://localhost:6379'
-  }
+  },
+  nodeEnv: process.env.NODE_ENV || 'dev'
 }
 
 const pro = {
@@ -25,7 +26,8 @@ const pro = {
   },
   dbRedis: {
     url: process.env.REDIS_URL || 'redis://localhost:6379'
-  }
+  },
+  nodeEnv: process.env.NODE_ENV || 'pro'
 }
 
 const config = { dev, pro }

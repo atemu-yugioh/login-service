@@ -3,8 +3,8 @@ const { StatusCodes, ReasonPhrases } = require('../utils/httpStatusCode')
 class SuccessResponse {
   constructor({ status = StatusCodes.OK, message, data, reasonPhrase = ReasonPhrases.OK }) {
     this.status = status
-    this.message = message ? message : reasonPhrase
-    this.data = data ? data : null
+    this.message = message || reasonPhrase
+    this.data = data || null
   }
 
   send(res, header = {}) {

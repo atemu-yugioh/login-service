@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const {
-  db: { host, port, name }
+  db: { host, port, name },
+  nodeEnv
 } = require('../configs/app.config')
 
 const connectionString = `mongodb://${host}:${port}/${name}`
@@ -11,7 +12,7 @@ class MongoDB {
   }
 
   connect() {
-    if (1 === 1) {
+    if (nodeEnv === 'dev') {
       mongoose.set('debug', true)
       mongoose.set('debug', { color: true })
     }

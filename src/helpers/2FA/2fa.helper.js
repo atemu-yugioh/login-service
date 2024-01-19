@@ -10,13 +10,14 @@ const generateOTPToken = (userId, serviceName, secret) => {
 }
 
 const generateQRCode = async (optAuth) => {
+  let QRCodeImageUrl = ''
   try {
-    const QRCodeImageUrl = await qrcode.toDataURL(optAuth)
+    QRCodeImageUrl = await qrcode.toDataURL(optAuth)
 
     return QRCodeImageUrl
   } catch (error) {
     console.log(error)
-    return
+    return QRCodeImageUrl
   }
 }
 

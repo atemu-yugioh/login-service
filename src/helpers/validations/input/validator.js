@@ -2,7 +2,7 @@ const Joi = require('joi')
 const { InputValidateError } = require('../../../core/error.response')
 
 const validator = (validationObject) =>
-  async function (req, res, next) {
+  async function fn(req, res, next) {
     try {
       await validationObject.validateAsync(
         { ...req.body, ...req.params, ...req.query },
@@ -10,7 +10,7 @@ const validator = (validationObject) =>
           abortEarly: false
         }
       )
-      next()
+      return next()
     } catch (error) {
       if (error instanceof Joi.ValidationError) {
         const errorRes = error.details.map(({ message, path }) => ({

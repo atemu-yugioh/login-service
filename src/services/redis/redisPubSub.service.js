@@ -24,8 +24,8 @@ class RedisPubSubService {
   }
 
   subscribe = async (channel, callback) => {
-    await this.subscriber.subscribe(channel, (message, channel) => {
-      callback(message, channel)
+    await this.subscriber.subscribe(channel, (message, resChannel) => {
+      callback(message, resChannel)
     })
   }
 

@@ -7,9 +7,9 @@ const getInfoData = ({ object = {}, fields = [] }) => {
   // code js
   const final = {}
 
-  fields = new Set(fields)
+  const setFields = new Set(fields)
 
-  const keysToCopy = Object.keys(object).filter((key) => fields.has(key))
+  const keysToCopy = Object.keys(object).filter((key) => setFields.has(key))
 
   for (const key of keysToCopy) {
     final[key] = object[key]
@@ -24,9 +24,9 @@ const unGetInfoData = ({ object = {}, fields = [] }) => {
 
   // code js
   const final = {}
-  fields = new Set(fields)
+  const setFields = new Set(fields)
 
-  const keysToCopy = Object.keys(object).filter((key) => !fields.has(key))
+  const keysToCopy = Object.keys(object).filter((key) => !setFields.has(key))
 
   for (const key of keysToCopy) {
     final[key] = object[key]
