@@ -15,7 +15,7 @@
   "lint-staged": {
     "*.js": [
       "npm run lint",
-      "npm run format",
+      "npm run prettier",
       "git add ."
     ]
   },
@@ -50,6 +50,8 @@
     "twilio": "^4.20.1"
   },
   "devDependencies": {
+    "@commitlint/cli": "^18.4.4",
+    "@commitlint/config-conventional": "^18.4.4",
     "eslint": "^8.56.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-eslint": "^9.0.0",

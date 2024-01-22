@@ -9,6 +9,7 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 'latest'
   },
+  ignorePatterns: ['!.commitlintrc.js'],
   rules: {
     'class-methods-use-this': 'off',
     'no-console': 'off',
