@@ -1,3 +1,4 @@
+const { successMessage } = require('../../locales')
 const { HEADER } = require('../configs/constant.config')
 const { CREATED, OK } = require('../core/success.response')
 const AuthService = require('../services/auth.service')
@@ -5,14 +6,14 @@ const AuthService = require('../services/auth.service')
 class AuthController {
   signUp = async (req, res) => {
     new CREATED({
-      message: 'Success !!',
+      message: req.t(successMessage.register_success),
       data: await AuthService.signUp({ ...req.body, deviceId: req.deviceId })
     }).send(res)
   }
 
   login = async (req, res) => {
     new OK({
-      message: 'Success',
+      message: req.t(successMessage.login_success),
       data: await AuthService.login({ ...req.body, deviceId: req.deviceId })
     }).send(res)
   }

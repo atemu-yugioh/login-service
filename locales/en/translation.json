@@ -1,0 +1,14 @@
+{
+    "login_success": "login successfully",
+    "register_success": "register successfully",
+    "email_invalid_domain": "domain must be .com or .net",
+    "name_required": "name is required",
+    "name_type_string": "name is string",
+    "name_size": "name must have min 5 and max 50 character",
+    "password_size": "password must have min 6 and max 32 character",
+    "password_required": "password is required",
+    "password_confirm": "password confirm must be match new password",
+    "phone_required": "phone is required",
+    "phone_type_string": "phone is string",
+    "phone_pattern": "phone invalid, phone have must be min 10 and max 12 character"
+}

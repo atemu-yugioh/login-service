@@ -5,6 +5,11 @@ const express = require('express')
 
 const app = express()
 
+// internationalization
+const i18next = require('i18next')
+const Backend = require('i18next-fs-backend')
+const middleware = require('i18next-http-middleware')
+
 // init middleware
 app.use(compression())
 app.use(morgan('dev'))
@@ -14,6 +19,25 @@ app.use(express.urlencoded({ extended: true }))
 
 // init database
 require('./dbs')
+
+// init i18next
+i18next
+  .use(Backend)
+  .use(middleware.LanguageDetector)
+  .init({
+    fallbackLng: 'en',
+    lng: 'en',
+    ns: ['translation'],
+    defaultNS: 'translation',
+    backend: {
+      loadPath: './locales/{{lng}}/{{ns}}.json'
+    },
+    detection: {
+      lookupHeader: 'accept-language'
+    }
+  })
+
+app.use(middleware.handle(i18next))
 
 // init routes
 app.use('/api/v1', require('./routes'))
@@ -32,10 +56,10 @@ app.use((req, res, next) => {
 app.use((error, req, res, _) => {
   const statusCode = error.status || 500
   return res.status(statusCode).json({
-    message: error.message || 'Internal Server Error!!!',
+    message: req.t(error.message) || 'Internal Server Error!!!',
     status: statusCode,
     data: null,
-    error: error.errors
+    error: !error?.errors ? null : error.errors.map((err) => ({ ...err, message: req.t(err.message) }))
   })
 })
 
