@@ -1,5 +1,20 @@
 require('dotenv').config()
 
+const test = {
+  app: {
+    port: 9999
+  },
+  db: {
+    host: 'localhost',
+    port: 27017,
+    name: 'loginTest'
+  },
+  dbRedis: {
+    url: 'redis://localhost:6379'
+  },
+  nodeEnv: 'test'
+}
+
 const dev = {
   app: {
     port: process.env.DEV_PORT_APP || 9999
@@ -30,7 +45,7 @@ const pro = {
   nodeEnv: process.env.NODE_ENV || 'pro'
 }
 
-const config = { dev, pro }
+const config = { test, dev, pro }
 
 const env = process.env.NODE_ENV
 
