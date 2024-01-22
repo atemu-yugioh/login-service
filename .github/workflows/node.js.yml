@@ -12,9 +12,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    env:
-      NODE_ENV: test
-
     services:
       mongodb:
         image: mongo
@@ -24,6 +21,19 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+
+      - name: Create customer Env file
+        working-directory: ./customer
+        run: |
+          touch .env
+          echo NODE_ENV=${{ secrets.NODE_ENV }} >> .env
+          echo DEV_APP_PORT=${{ secrets.DEV_APP_PORT }} >> .env
+          echo DEV_DB_HOST=${{ secrets.DEV_DB_HOST }} >> .env
+          echo DEV_DB_PORT=${{ secrets.DEV_DB_PORT }} >> .env
+          echo DEV_DB_NAME=${{ secrets.DEV_DB_NAME }} >> .env
+          echo REDIS_URL=${{ secrets.REDIS_URL }} >> .env
+
+          cat .env
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
