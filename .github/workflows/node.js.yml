@@ -12,6 +12,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      NODE_ENV: test
+
     services:
       mongodb:
         image: mongo
@@ -33,5 +36,5 @@ jobs:
       - name: Run Lint
         run: npm run lint
 
-      - name: Unit
+      - name: Unit Test
         run: npm run test
