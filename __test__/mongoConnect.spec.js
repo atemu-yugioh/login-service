@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const {
   db: { host, port, name }
-} = require('../src/configs/configTest')
+} = require('../src/configs/app.config')
 
 const connectionString = `mongodb://${host}:${port}/${name}`
 
