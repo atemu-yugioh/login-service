@@ -60,7 +60,7 @@ app.use((error, req, res, _) => {
     status: statusCode,
     timestamp: error.timestamp,
     data: null,
-    error: !error?.errors ? null : error.errors.map((err) => ({ ...err, message: req.t(err.message) }))
+    errors: !error?.errors ? null : error.errors.map((err) => ({ ...err, message: req.t(err.message) }))
   })
 })
 

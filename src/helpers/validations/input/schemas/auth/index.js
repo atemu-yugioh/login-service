@@ -5,8 +5,12 @@ const emailSchema = Joi.string()
   .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
   .message(inputErrorMessage.email_invalid_domain)
   .required()
+  .messages({
+    'string.base': inputErrorMessage.email_type_string
+  })
 
 const passwordSchema = Joi.string().min(6).max(16).required().messages({
+  'string.base': inputErrorMessage.password_type_string,
   'string.min': inputErrorMessage.password_size,
   'string.max': inputErrorMessage.password_size,
   'any.required': inputErrorMessage.password_required

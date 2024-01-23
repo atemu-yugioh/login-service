@@ -8,11 +8,13 @@ const errorMessage = {
 }
 
 const inputErrorMessage = {
+  email_type_string: 'email_type_string',
   email_invalid_domain: 'email_invalid_domain',
   name_size: 'name_size',
   name_required: 'name_required',
   name_type_string: 'name_type_string',
   password_size: 'password_size',
+  password_type_string: 'password_type_string',
   password_required: 'password_required',
   password_confirm: 'password_confirm',
   phone_required: 'phone_required',

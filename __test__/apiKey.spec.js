@@ -9,7 +9,7 @@ const apiKeyModel = require('../src/models/apiKey.model')
 // create api test
 const apiKeyTest = {
   key: 'api-key-test',
-  permissions: [],
+  permissions: ['auth'],
   createdBy: 'Tester',
   deviceId: 'device-id-test'
 }

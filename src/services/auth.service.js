@@ -6,7 +6,7 @@ const { getInfoData, generateObjectMongodbId } = require('../utils')
 const { generateUniqueSecret, generateOTPToken, generateQRCode, verifyOTPToken } = require('../helpers/2FA/2fa.helper')
 const RedisService = require('./redis/redis.service')
 
-const selectFields = ['name', 'email', 'phone', 'address', 'birthDay', 'avatar', 'is2FAEnabled']
+const selectFields = ['_id', 'name', 'email', 'phone', 'address', 'birthDay', 'avatar', 'is2FAEnabled']
 class AuthService {
   static signUp = async ({ name, email, password, phone, deviceId, ...other }) => {
     // check exist user
