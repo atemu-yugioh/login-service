@@ -5,7 +5,7 @@ const { rateLimiter } = require('../middlewares/rateLimiter.middleware')
 const router = express.Router()
 
 // detect rate limit
-router.use(rateLimiter(30, 15))
+router.use(rateLimiter(30, 1500))
 
 // required apiKey and device
 router.use(requiredApiKey)

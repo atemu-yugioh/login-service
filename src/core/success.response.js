@@ -1,10 +1,17 @@
 const { StatusCodes, ReasonPhrases } = require('../utils/httpStatusCode')
 
 class SuccessResponse {
-  constructor({ status = StatusCodes.OK, message, data, reasonPhrase = ReasonPhrases.OK }) {
+  constructor({
+    status = StatusCodes.OK,
+    message,
+    data,
+    reasonPhrase = ReasonPhrases.OK,
+    timestamp = new Date().getTime()
+  }) {
     this.status = status
     this.message = message || reasonPhrase
     this.data = data || null
+    this.timestamp = timestamp
   }
 
   send(res, header = {}) {

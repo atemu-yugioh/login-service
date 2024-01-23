@@ -1,9 +1,10 @@
 const { ReasonPhrases, StatusCodes } = require('../utils/httpStatusCode')
 
 class ErrorResponse extends Error {
-  constructor(message, status) {
+  constructor(message, status, timestamp = new Date().getTime()) {
     super(message)
     this.status = status
+    this.timestamp = timestamp
   }
 }
 

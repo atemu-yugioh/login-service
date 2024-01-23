@@ -58,6 +58,7 @@ app.use((error, req, res, _) => {
   return res.status(statusCode).json({
     message: req.t(error.message) || 'Internal Server Error!!!',
     status: statusCode,
+    timestamp: error.timestamp,
     data: null,
     error: !error?.errors ? null : error.errors.map((err) => ({ ...err, message: req.t(err.message) }))
   })

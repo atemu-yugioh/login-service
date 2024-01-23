@@ -1,4 +1,4 @@
-const { BadRequestError } = require('../core/error.response')
+const { ForbiddenError } = require('../core/error.response')
 const { create, getApiKey } = require('../models/repositories/apiKey.repositories')
 const { unGetInfoData } = require('../utils')
 
@@ -15,7 +15,7 @@ class ApiKeyService {
     const apiKeyFound = await getApiKey(key)
 
     if (!apiKeyFound) {
-      throw new BadRequestError('Access denied. ApiKey not exist!!')
+      throw new ForbiddenError('Access denied. ApiKey not exist!!')
     }
 
     return unGetInfoData({ object: apiKeyFound, fields: UN_GET_FIELDS })

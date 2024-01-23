@@ -12,10 +12,6 @@ const requiredApiKey = asyncHandler(async (req, res, next) => {
 
   const objectKey = await ApiKeyService.getApiKey(key)
 
-  if (!objectKey) {
-    throw new ForbiddenError('Access denied. ApiKey not exist !!')
-  }
-
   req.objectKey = objectKey
 
   return next()
@@ -25,7 +21,7 @@ const requiredDevice = asyncHandler(async (req, res, next) => {
   const deviceId = req.headers[HEADER.DEVICE_ID]?.toString()
 
   if (!deviceId) {
-    throw new BadRequestError('Error: DeviceId is required !!!')
+    throw new ForbiddenError('DeviceId is required !!!')
   }
 
   req.deviceId = deviceId
