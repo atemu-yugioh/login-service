@@ -5,7 +5,7 @@ const ApiKeyService = require('../services/apiKey.service')
 class ApiKeyController {
   create = async (req, res) => {
     new CREATED({
-      message: 'Create apiKey success',
+      message: 'Create apiKey successs',
       data: await ApiKeyService.create({ ...req.body })
     }).send(res)
   }
