@@ -8,6 +8,7 @@ const userModel = require('../src/models/user.model')
 const sessionModel = require('../src/models/session.model')
 const { findByEmail } = require('../src/models/repositories/user.repositories')
 const en = require('../locales/en/translation.json')
+const apiKeyModel = require('../src/models/apiKey.model')
 
 const infoRegister = {
   email: 'tester01061@gmail.com',
@@ -19,7 +20,7 @@ const infoRegister = {
 // create api test
 const apiKeyTest = {
   key: 'api-key-test',
-  permissions: [],
+  permissions: ['auth'],
   createdBy: 'Tester',
   deviceId: 'device-id-test'
 }
@@ -57,8 +58,10 @@ describe('User Registration', () => {
     connection = await mongoose.connect(connectionString)
   })
   beforeEach(async () => {
+    await apiKeyModel.deleteMany({})
     await userModel.deleteMany({})
     await sessionModel.deleteMany({})
+    await apiKeyModel.create(apiKeyTest)
   })
 
   // close connection to mongodb
@@ -66,7 +69,7 @@ describe('User Registration', () => {
     await connection.disconnect()
   })
 
-  it('should return status 200, when signup request is valid', async () => {
+  it('should return status 201, when signup request is valid', async () => {
     const response = await registerRequest()
 
     const { body } = response
