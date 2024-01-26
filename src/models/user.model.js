@@ -1,4 +1,4 @@
-const { model, Schema } = require('mongoose')
+const { model, Schema, Types } = require('mongoose')
 
 const DOCUMENT_NAME = 'User'
 const COLLECTION_NAME = 'Users'
@@ -10,6 +10,10 @@ const userSchema = new Schema(
       required: true,
       index: true
     },
+    phone: {
+      type: String,
+      required: true
+    },
     name: {
       type: String,
       required: true
@@ -17,6 +21,14 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: true
+    },
+    secretKeyOTP: {
+      type: String,
+      default: null
+    },
+    is2FAEnabled: {
+      type: Boolean,
+      default: false
     },
     avatar: {
       type: String,
@@ -26,11 +38,7 @@ const userSchema = new Schema(
       type: String,
       default: ''
     },
-    phone: {
-      type: String,
-      required: true
-    },
-    birthDay: {
+    birthday: {
       type: String,
       default: ''
     },
@@ -42,7 +50,7 @@ const userSchema = new Schema(
       type: Boolean,
       default: false
     },
-    isDeleted: {
+    isDelete: {
       type: Boolean,
       default: false
     },
@@ -51,12 +59,12 @@ const userSchema = new Schema(
       default: false
     },
     createdBy: {
-      type: Schema.Types.ObjectId,
+      type: Types.ObjectId,
       required: true,
       ref: 'User'
     },
     modifiedBy: {
-      type: Schema.Types.ObjectId,
+      type: Types.ObjectId,
       required: true,
       ref: 'User'
     }

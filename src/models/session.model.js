@@ -34,7 +34,7 @@ const sessionSchema = new Schema(
       type: Boolean,
       default: false
     },
-    isDeleted: {
+    isDelete: {
       type: Boolean,
       default: false
     },
@@ -57,7 +57,8 @@ const sessionSchema = new Schema(
     timestamps: {
       createdAt: 'createdDate',
       updatedAt: 'modifiedDate'
-    }
+    },
+    collection: COLLECTION_NAME
   }
 )
 

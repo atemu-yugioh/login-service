@@ -1,6 +1,6 @@
 const { HEADER } = require('../configs/constant.config')
 const { AuthFailError } = require('../core/error.response')
-const asyncHandler = require('../helper/asyncHandler')
+const asyncHandler = require('../helpers/asyncHandler')
 const AuthService = require('../services/auth.service')
 const SessionService = require('../services/session.service')
 const { verifyJWT } = require('../utils/auth.utils')

@@ -1,9 +1,10 @@
-const { StatusCodes, ReasonPhrases } = require('../utils/httpStatusCode')
+const { ReasonPhrases, StatusCodes } = require('../utils/httpStatusCode')
 
 class ErrorResponse extends Error {
-  constructor(message, status) {
+  constructor(message, status, timestamp = new Date().getTime()) {
     super(message)
     this.status = status
+    this.timestamp = timestamp
   }
 }
 
@@ -19,14 +20,14 @@ class ConflictRequestError extends ErrorResponse {
   }
 }
 
-class AuthFailError extends ErrorResponse {
-  constructor(message = ReasonPhrases.UNAUTHORIZED, status = StatusCodes.UNAUTHORIZED) {
+class NotFoundError extends ErrorResponse {
+  constructor(message = ReasonPhrases.NOT_FOUND, status = StatusCodes.NOT_FOUND) {
     super(message, status)
   }
 }
 
-class NotFoundError extends ErrorResponse {
-  constructor(message = ReasonPhrases.NOT_FOUND, status = StatusCodes.NOT_FOUND) {
+class AuthFailError extends ErrorResponse {
+  constructor(message = ReasonPhrases.UNAUTHORIZED, status = StatusCodes.UNAUTHORIZED) {
     super(message, status)
   }
 }
@@ -37,10 +38,25 @@ class ForbiddenError extends ErrorResponse {
   }
 }
 
+class InputValidateError extends ErrorResponse {
+  constructor(errors = null, message = 'input validate fail', status = 422) {
+    super(message, status)
+    this.errors = errors
+  }
+}
+
+class TooManyRequestError extends ErrorResponse {
+  constructor(message = ReasonPhrases.TOO_MANY_REQUESTS, status = StatusCodes.TOO_MANY_REQUESTS) {
+    super(message, status)
+  }
+}
+
 module.exports = {
-  ConflictRequestError,
   BadRequestError,
-  AuthFailError,
   NotFoundError,
-  ForbiddenError
+  ConflictRequestError,
+  AuthFailError,
+  ForbiddenError,
+  InputValidateError,
+  TooManyRequestError
 }

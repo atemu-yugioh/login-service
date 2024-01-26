@@ -1,0 +1,55 @@
+name: Node.js CI
+
+on:
+  push:
+    branches:
+      - 'latest-code'
+  pull_request:
+    branches:
+      - 'main'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      mongodb:
+        image: mongo
+        ports:
+          - 27017:27017
+
+      redis:
+        image: 'redis:latest'
+        ports:
+          - 6379:6379
+        options: --entrypoint redis-server
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Create customer Env file
+        run: |
+          touch .env
+          echo NODE_ENV=${{ secrets.NODE_ENV }} >> .env
+          echo DEV_APP_PORT=${{ secrets.DEV_APP_PORT }} >> .env
+          echo DEV_DB_HOST=${{ secrets.DEV_DB_HOST }} >> .env
+          echo DEV_DB_PORT=${{ secrets.DEV_DB_PORT }} >> .env
+          echo DEV_DB_NAME=${{ secrets.DEV_DB_NAME }} >> .env
+          echo REDIS_URL=${{ secrets.REDIS_URL }} >> .env
+
+          cat .env
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Lint
+        run: npm run lint
+
+      - name: Unit Test
+        run: npm run test

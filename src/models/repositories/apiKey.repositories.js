@@ -7,14 +7,14 @@ const create = async ({
   createdBy = 'Admin',
   modifiedBy = 'Admin'
 }) => {
-  return await apiKeyModel.create({ key, permissions, createdBy, modifiedBy })
+  return apiKeyModel.create({ key, permissions, createdBy, modifiedBy })
 }
 
-const getByKey = async (key) => {
-  return await apiKeyModel.findOne({ key }).lean()
+const getApiKey = async (key) => {
+  return apiKeyModel.findOne({ key }).lean()
 }
 
 module.exports = {
   create,
-  getByKey
+  getApiKey
 }

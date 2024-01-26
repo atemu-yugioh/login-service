@@ -1,40 +1,62 @@
-const { OK, CREATED } = require('../core/success.response')
+const { successMessage } = require('../../locales')
+const { HEADER } = require('../configs/constant.config')
+const { CREATED, OK } = require('../core/success.response')
 const AuthService = require('../services/auth.service')
-const { createRsaKey, createHexKey } = require('../utils/auth.utils')
 
 class AuthController {
-  signUp = async (req, res, next) => {
+  signUp = async (req, res) => {
     new CREATED({
-      message: 'sign up success',
+      message: req.t(successMessage.register_success),
       data: await AuthService.signUp({ ...req.body, deviceId: req.deviceId })
     }).send(res)
   }
 
-  login = async (req, res, next) => {
+  login = async (req, res) => {
     new OK({
-      message: 'login success',
+      message: req.t(successMessage.login_success),
       data: await AuthService.login({ ...req.body, deviceId: req.deviceId })
     }).send(res)
   }
 
-  logout = async (req, res, next) => {
+  logout = async (req, res) => {
     new OK({
-      message: 'logout success',
-      data: await AuthService.logout({ session: req.session })
+      message: 'Success',
+      data: await AuthService.logout({ ...req.session })
     }).send(res)
   }
 
-  handleRefreshToken = async (req, res, next) => {
+  handleRefreshToken = async (req, res) => {
     new OK({
-      message: 'get token success',
+      message: 'Success',
       data: await AuthService.handleRefreshToken({ ...req })
     }).send(res)
   }
 
-  changePassWord = async (req, res, next) => {
+  changePassword = async (req, res) => {
     new OK({
-      message: 'change password success',
-      data: await AuthService.changePassword({ ...req, ...req.body })
+      message: 'Success',
+      data: await AuthService.changePassword({ user: req.user, ...req.body })
+    }).send(res)
+  }
+
+  enable2FA = async (req, res) => {
+    new OK({
+      message: 'Success',
+      data: await AuthService.enable2FA(req.user.userId)
+    }).send(res)
+  }
+
+  disable2FA = async (req, res) => {
+    new OK({
+      message: 'Success',
+      data: await AuthService.disable2FA(req.user.userId)
+    }).send(res)
+  }
+
+  verify2FA = async (req, res) => {
+    new OK({
+      message: 'Success',
+      data: await AuthService.verify2FA({ ...req.body, id: req.headers[HEADER.CLIENT_ID]?.toString() })
     }).send(res)
   }
 }

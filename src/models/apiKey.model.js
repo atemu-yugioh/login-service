@@ -18,7 +18,7 @@ const apiKeySchema = new Schema(
       type: Boolean,
       default: false
     },
-    isDeleted: {
+    isDelete: {
       type: Boolean,
       default: false
     },
@@ -33,6 +33,7 @@ const apiKeySchema = new Schema(
     },
     modifiedBy: {
       type: String,
+      default: 'Admin',
       required: true
     }
   },

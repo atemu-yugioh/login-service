@@ -1,0 +1,16 @@
+{
+    "login_success": "đăng nhập thành công",
+    "register_success": "đăng ký thành công",
+    "email_type_string": "email phải là chuỗi",
+    "email_invalid_domain": "domain phải là .com hoặc .net",
+    "name_required": "tên không được để trống",
+    "name_type_string": "tên phải là chuỗi",
+    "name_size": "tên phải có ít nhất 5 và nhiều nhất là 50 ký tự",
+    "password_type_string": "mật khẩu không được để trống",
+    "password_size": "mật khẩu phải có ít nhất 6 và nhiều nhất là 16 ký tự",
+    "password_required": "mật khẩu không được để trống",
+    "password_confirm": "mật khẩu xác nhận phải giống mật khẩu mới",
+    "phone_required": "số điện thoại không được để trống",
+    "phone_type_string": "số điện thoại phải là 1 chuỗi",
+    "phone_pattern": "số điện thoại không hợp lệ, phải là chuỗi có 10-12 chữ số."
+}

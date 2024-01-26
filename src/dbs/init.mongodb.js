@@ -1,41 +1,42 @@
 const mongoose = require('mongoose')
 
 const {
-  db: { host, port, name }
-} = require('../configs/mongodb.config')
+  db: { host, port, name },
+  nodeEnv
+} = require('../configs/app.config')
 
 const connectionString = `mongodb://${host}:${port}/${name}`
 
-class Database {
+class MongoDB {
   constructor() {
     this.connect()
   }
 
   connect() {
-    if (1 === 1) {
+    if (nodeEnv === 'dev') {
       mongoose.set('debug', true)
       mongoose.set('debug', { color: true })
     }
 
     mongoose
       .connect(connectionString)
-      .then((_) => {
-        console.log('Connect database success')
+      .then(() => {
+        console.log('Connected to mongodb')
       })
-      .catch((error) => {
-        console.log('Unable connect to databse')
+      .catch(() => {
+        console.log('Unable connect to mongodb')
       })
   }
 
-  static getInstance() {
-    if (!Database.instance) {
-      Database.instance = new Database()
+  static getInstance = () => {
+    if (!MongoDB.instance) {
+      MongoDB.instance = new MongoDB()
     }
 
-    return Database.instance
+    return MongoDB.instance
   }
 }
 
-const mongodbInstance = Database.getInstance()
+const instanceMongoDB = MongoDB.getInstance()
 
-module.exports = mongodbInstance
+module.exports = instanceMongoDB
