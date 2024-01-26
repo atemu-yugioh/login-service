@@ -1,11 +1,11 @@
 const mongoose = require('mongoose')
 
 const {
-  db: { host, port, name },
+  db: { host, port, name, url },
   nodeEnv
 } = require('../configs/app.config')
 
-const connectionString = `mongodb://${host}:${port}/${name}`
+const connectionString = url || `mongodb://${host}:${port}/${name}`
 
 class MongoDB {
   constructor() {

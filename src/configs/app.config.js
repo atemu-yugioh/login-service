@@ -22,7 +22,8 @@ const dev = {
   db: {
     host: process.env.DEV_DB_HOST || 'localhost',
     port: process.env.DEV_DB_PORT || 27017,
-    name: process.env.name || 'loginDev'
+    name: process.env.name || 'loginDev',
+    url: process.env.MONGO_URL
   },
   dbRedis: {
     url: process.env.REDIS_URL || 'redis://localhost:6379'
@@ -37,7 +38,8 @@ const pro = {
   db: {
     host: process.env.DB_HOST || 'localhost',
     port: process.env.DB_PORT || 27017,
-    name: process.env.name || 'loginDev'
+    name: process.env.name || 'loginDev',
+    url: process.env.MONGO_URL
   },
   dbRedis: {
     url: process.env.REDIS_URL || 'redis://localhost:6379'

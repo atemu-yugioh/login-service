@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const request = require('supertest')
 const app = require('../src/app')
 const {
-  db: { host, port, name }
+  db: { host, port, name, url }
 } = require('../src/configs/app.config')
 const userModel = require('../src/models/user.model')
 const sessionModel = require('../src/models/session.model')
@@ -54,7 +54,7 @@ describe('User Registration', () => {
   let connection
   // connect to database mongodb (redis)
   beforeAll(async () => {
-    const connectionString = `mongodb://${host}:${port}/${name}`
+    const connectionString = url || `mongodb://${host}:${port}/${name}`
     connection = await mongoose.connect(connectionString)
   })
   beforeEach(async () => {

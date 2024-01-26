@@ -1,9 +1,9 @@
 const mongoose = require('mongoose')
 const {
-  db: { host, port, name }
+  db: { host, port, name, url }
 } = require('../src/configs/app.config')
 
-const connectionString = `mongodb://${host}:${port}/${name}`
+const connectionString = url || `mongodb://${host}:${port}/${name}`
 
 const TestSchema = new mongoose.Schema({ name: String })
 const TestModel = mongoose.model('Test', TestSchema)
