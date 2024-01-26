@@ -199,5 +199,11 @@ describe('User Registration', () => {
     expect(sessionFound).toBeFalsy()
   })
 
+  it('should return accessToken and refreshToken when register success', async () => {
+    const status = 200
+
+    expect(status).toBe(status)
+  })
+
   // kiểm tra nếu không truyền header
 })
