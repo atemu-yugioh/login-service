@@ -30,6 +30,6 @@ jobs:
       - name: Create Env file
         run: |
           touch .env
-          echo ${{ secrets.PROD_ENV }} >> .env
+          echo "${{ secrets.PROD_ENV }}" > .env
 
           cat .env
