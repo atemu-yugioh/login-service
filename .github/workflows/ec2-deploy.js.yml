@@ -26,6 +26,8 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+
+      - name: restart server
         run: pm2 restart login-service
 
       - name: Create Env file
