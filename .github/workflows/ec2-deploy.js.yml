@@ -32,7 +32,7 @@ jobs:
           touch .env
           echo "${{ secrets.PROD_ENV }}" > .env
 
-          cat .
+          cat .env
 
       - name: restart server
         run: pm2 restart login-service
