@@ -1,16 +1,17 @@
 # Login service
 
-# Cài đặt môi trường code React
+# Cài đặt môi trường code Nodejs
 
 ## 1. Môi trường hoàn hảo để code
 
-1. Nodejs để run server react dưới local
+1. Nodejs để run server nodejs dưới local
 2. VS code để code
    - Cài thêm extention Icon Theme cho VS code (mình dùng Material Icon Theme)
    - Prettier để format code
    - ES Lint để quản lý tiêu chuẩn code
-3. Trình duyệt Chrome với extension là React Developer Tool và Redux Dev Tool extension
-4. Git: Tạo repo trên github để quản lý source code
+   - husky: sử dụng git hook để kiểm tra ES Lint và Prettier trước khi commit và check message commit đúng chuẩn
+   - commitlintrc: quy định chuẩn message cho message commit
+3. Git: Tạo repo trên github để quản lý source code
 
 ## 2. Khởi tạo Project với CRA
 
@@ -107,4 +108,11 @@ Lúc này bạn chỉ cần chạy
 
 Cú pháp viết trong những file này tương tự như trong file `.gitignore`, các bạn có thể tìm lại trong file `GitCanban.md` trong thư mục `GitCanBanDenNangCao` nhé.
 
-## 5. CICD và deploy với Vercel
+### 4.8. install husky để sử dụng git hook
+
+- check eslint và prettier
+- check commit message
+
+### 4.9. setup commit lint
+
+- check commit message
