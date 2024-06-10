@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  api:
+    container_name: loginApi
+    restart: unless-stopped
+    build:
+      context: .
+    volumes:
+      - ./src:/app/src
+    ports:
+      - '9999:9999'
+    env_file:
+      - .env
+    networks:
+      - crawler
+    depends_on:
+      - redis
+      - mongodb
+
+  redis:
+    image: redis:6.2.6-alpine
+    container_name: redis
+    ports:
+      - 6379:6379
+    networks:
+      - crawler
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - 27017:27017
+    networks:
+      - crawler
+
+networks:
+  crawler:

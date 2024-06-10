@@ -3,6 +3,7 @@ const {
   dbRedis: { url }
 } = require('../configs/app.config')
 
+console.log(url)
 const redisClient = createClient({
   url
 })
