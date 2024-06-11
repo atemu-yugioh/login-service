@@ -39,19 +39,19 @@ jobs:
 
           cat .env
 
-      # - name: restart server
-      #   run: pm2 restart login-service
+      - name: restart server
+        run: pm2 restart login-service
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: nguyenthieng0106/login-service
-          tags: |
-            type=raw,value={{date 'YYYY-MM-DD'}}
+      # - name: Extract metadata (tags, labels) for Docker
+      #   id: meta
+      #   uses: docker/metadata-action@v5
+      #   with:
+      #     images: nguyenthieng0106/login-service
+      #     tags: |
+      #       type=raw,value={{date 'YYYY-MM-DD'}}
 
-      - name: Deploy
-        run: |
-          cd /home/ubuntu/actions-runner/_work/login-service/login-service
-          sudo chmod +x deploy.sh
-          sh deploy.sh nguyenthieng0106/login-service ${{ steps.meta.outputs.tags }}
+      # - name: Deploy
+      #   run: |
+      #     cd /home/ubuntu/actions-runner/_work/login-service/login-service
+      #     sudo chmod +x deploy.sh
+      #     sh deploy.sh nguyenthieng0106/login-service ${{ steps.meta.outputs.tags }}
