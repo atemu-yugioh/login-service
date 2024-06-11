@@ -3,6 +3,11 @@
 
 name: Node.js CI/CD To EC2
 
+# Cancel previous runs that are not completed
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+
 on:
   push:
     branches: ['master']
@@ -34,5 +39,18 @@ jobs:
 
           cat .env
 
-      - name: restart server
-        run: pm2 restart login-service
+      # - name: restart server
+      #   run: pm2 restart login-service
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: nguyenthieng0106/login-service
+          tags: |
+            type=raw,value={{date 'YYYY-MM-DD'}}
+
+      - name: Deploy
+        run: |
+          cd /actions-runner/_work/login-service/login-service
+          sh deploy.sh nguyenthieng0106/login-service ${{ steps.meta.outputs.tags }}
