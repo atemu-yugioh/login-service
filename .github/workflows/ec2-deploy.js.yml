@@ -53,4 +53,5 @@ jobs:
       - name: Deploy
         run: |
           cd /home/ubuntu/actions-runner/_work/login-service/login-service
+          sudo chmod +x deploy.sh
           sh deploy.sh nguyenthieng0106/login-service ${{ steps.meta.outputs.tags }}
