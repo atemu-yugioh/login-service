@@ -2,12 +2,9 @@ version: '3.8'
 
 services:
   api:
+    image: nguyenthieng0106/login-service
     container_name: loginApi
     restart: unless-stopped
-    build:
-      context: .
-    volumes:
-      - ./src:/app/src
     ports:
       - '9999:9999'
     env_file:
